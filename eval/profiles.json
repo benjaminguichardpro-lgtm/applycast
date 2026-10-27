@@ -1,47 +1,47 @@
 [
   {
-    "name": "p1-idea-solo",
-    "offer": "A scheduling tool for independent physiotherapists that cuts no-shows with automatic SMS reminders",
-    "stage": "Idea",
-    "role": "Solo non-technical founder, former physiotherapy clinic manager",
-    "active_goal": "Get 5 paying clinics on a $49/month plan by January 31, 2027",
-    "constraint_text": "10 hours a week alongside a full-time job",
-    "weekly_hours_limit": 10
-  },
-  {
-    "name": "p2-prerevenue-prod",
-    "offer": "An AI assistant that turns customer support tickets into help-center articles for SaaS teams",
+    "name": "p1-prelaunch-12h",
+    "offer": "Dispatch and invoicing software for small US HVAC contractors with 3 to 10 technicians",
     "stage": "Pre-revenue",
-    "role": "Technical solo founder, builds and sells",
-    "active_goal": "Convert 3 of 12 beta users into paying accounts by December 15, 2026",
-    "constraint_text": "20 hours a week, no budget for ads",
-    "weekly_hours_limit": 20
+    "role": "Solo founder-operator, building the product and doing customer discovery calls",
+    "active_goal": "Sign the first 3 paying contractors at $99/month by January 31, 2027",
+    "constraint_text": "12 hours a week, no marketing budget",
+    "weekly_hours_limit": 12
   },
   {
-    "name": "p3-contract-review",
-    "offer": "AI contract review for freelance agencies, flags risky clauses and drafts the redlines",
+    "name": "p2-first-revenue-7h",
+    "offer": "Client reporting software for US marketing agencies with 5 to 20 staff",
     "stage": "<$10k MRR",
-    "role": "Solo founder, handles sales, product and support",
-    "active_goal": "Raise MRR from $4,200 to $8,000 by March 31, 2027",
-    "constraint_text": "8 hours a week outside customer support",
-    "weekly_hours_limit": 8
+    "role": "Solo founder-operator, handles sales, onboarding and support",
+    "active_goal": "Grow MRR from $3,500 to $6,000 by April 30, 2027",
+    "constraint_text": "7 hours a week outside customer support",
+    "weekly_hours_limit": 7
   },
   {
-    "name": "p4-churn-small-team",
-    "offer": "Compliance reporting software for small accounting firms",
+    "name": "p3-first-revenue-4h",
+    "offer": "Scheduling and billing software for US independent physical therapy clinics",
+    "stage": "<$10k MRR",
+    "role": "Technical founder still working full time, builds and sells on evenings and weekends",
+    "active_goal": "Go from 4 to 10 paying clinics by March 31, 2027",
+    "constraint_text": "4 hours a week",
+    "weekly_hours_limit": 4
+  },
+  {
+    "name": "p4-growth-5h",
+    "offer": "Expense approval workflow software for US construction subcontractors",
     "stage": "$10k–100k MRR",
-    "role": "CEO of a 6-person team, runs sales and customer success",
-    "active_goal": "Cut monthly logo churn from 6% to 3% by March 31, 2027",
-    "constraint_text": "6 hours a week, the team has no spare engineering time before February",
-    "weekly_hours_limit": 6
+    "role": "Founder-CEO of a 4-person team, runs sales and customer success",
+    "active_goal": "Cut monthly churn from 5% to 3% by March 31, 2027",
+    "constraint_text": "5 hours a week, the engineers are booked until February",
+    "weekly_hours_limit": 5
   },
   {
-    "name": "p5-expansion-scale",
-    "offer": "A workflow automation platform for mid-size logistics companies, sold through demos",
-    "stage": "$100k+ MRR",
-    "role": "Co-founder and head of growth in a 10-person company",
-    "active_goal": "Grow net revenue retention from 98% to 110% by June 30, 2027",
-    "constraint_text": "5 hours a week, no new hires this half-year",
-    "weekly_hours_limit": 5
+    "name": "p5-established-1h30",
+    "offer": "Document automation platform for US mortgage brokers",
+    "stage": "$10k–100k MRR",
+    "role": "Founder-operator of a 9-person company, still on the weekly sales calls",
+    "active_goal": "Raise net revenue retention from 97% to 105% by June 30, 2027",
+    "constraint_text": "1.5 hours a week for new initiatives",
+    "weekly_hours_limit": 1.5
   }
 ]
