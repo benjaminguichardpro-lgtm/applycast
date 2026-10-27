@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getProfile, isProfileComplete } from "@/lib/profile-db";
 import { FREE_MONTHLY_ANALYSES } from "@/lib/quota";
@@ -25,6 +26,14 @@ export default async function AnalyzePage() {
             {month} · {stats.isPro ? "Unlimited analyses" : `${stats.left} of ${FREE_MONTHLY_ANALYSES} free analyses left`}
           </p>
           <h1 className="mt-2 text-4xl font-medium tracking-tight">Paste a video, leave with a plan</h1>
+          {!stats.isPro && stats.left === 1 && (
+            <p className="mt-2 text-sm text-muted">
+              That’s your last free analysis this month.{" "}
+              <Link href="/upgrade" className="font-semibold text-primary underline">
+                See Pro
+              </Link>
+            </p>
+          )}
         </div>
         <dl className="flex gap-8 text-right">
           {(

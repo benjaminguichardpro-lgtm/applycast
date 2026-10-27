@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { deleteAccount } from "@/app/auth/account-actions";
 import { signOut } from "@/app/auth/actions";
@@ -42,6 +43,11 @@ export function UserMenu({ email, isPro, isFounding }: { email: string; isPro: b
           <p className="truncate px-2 text-sm text-muted">{email}</p>
           {isPro && (
             <p className="px-2 pb-2 pt-1 text-xs font-semibold text-primary">{isFounding ? "★ Pro · Founding Member" : "Pro"}</p>
+          )}
+          {!isPro && (
+            <Link href="/upgrade" className={`${item} block`}>
+              Upgrade to Pro
+            </Link>
           )}
           {isPro && (
             <form action={openPortal}>
