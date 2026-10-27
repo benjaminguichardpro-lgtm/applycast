@@ -15,7 +15,12 @@ function headers() {
 // mode=native: only existing captions, never AI transcription (out of MVP scope, and billed higher).
 export async function fetchSupadataTranscript(videoId: string): Promise<Transcript> {
   const params = new URLSearchParams({ url: watchUrl(videoId), text: "false", mode: "native" });
-  const res = await fetch(`${BASE}/transcript?${params}`, { headers: headers(), signal: AbortSignal.timeout(45_000) });
+  let res = await fetch(`${BASE}/transcript?${params}`, { headers: headers(), signal: AbortSignal.timeout(45_000) });
+  // Supadata rate-limits bursts: wait and retry a few times before giving up.
+  for (let attempt = 1; res.status === 429 && attempt <= 3; attempt++) {
+    await new Promise((r) => setTimeout(r, 2000 * attempt));
+    res = await fetch(`${BASE}/transcript?${params}`, { headers: headers(), signal: AbortSignal.timeout(45_000) });
+  }
 
   if (res.status === 206 || res.status === 404) throw new TranscriptUnavailableError();
   if (!res.ok) throw new Error(`Supadata transcript error ${res.status}`);

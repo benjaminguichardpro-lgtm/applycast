@@ -93,7 +93,7 @@ async function main() {
 
   // 1. Transcripts (cached on disk so a rerun never pays Supadata twice).
   const transcripts = new Map<string, Transcript | "unavailable">();
-  await sleepless(videos, concurrency, async (v) => {
+  await sleepless(videos, 1, async (v) => {
     const file = path.join(cacheDir, `${v.id}.json`);
     if (existsSync(file)) {
       const c = JSON.parse(readFileSync(file, "utf8"));
