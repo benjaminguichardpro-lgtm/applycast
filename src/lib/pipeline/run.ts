@@ -73,6 +73,8 @@ export async function runAnalysis({ supabase, analysisId, videoId, profile, past
           kind: p.kind,
           tag: p.tag,
           reason: p.reason,
+          is_key: p.isKey,
+          key_reason: p.keyReason,
         })),
       )
       .select("id");

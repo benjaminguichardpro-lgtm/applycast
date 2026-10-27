@@ -42,7 +42,7 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
 
   const { data: insights } = await supabase
     .from("insights")
-    .select("id, ts_seconds, text, kind, tag, reason")
+    .select("id, ts_seconds, text, kind, tag, reason, is_key, key_reason")
     .eq("analysis_id", id)
     .order("position", { ascending: true });
   const points = insights ?? [];
@@ -136,13 +136,22 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
             {badge.label}
           </p>
           <p className="mt-4 text-2xl font-light leading-snug">
-            {low
-              ? applied === 0
-                ? "Low match: nothing to apply."
-                : `Low match: only ${applied} of ${points.length} points applies.`
-              : `${applied} of ${points.length} points apply to you.`}
+            {low ? "Low match: nothing to apply." : `${applied} of ${points.length} points apply to you.`}
           </p>
           <p className={`mt-3 text-sm ${low ? "text-muted" : "opacity-85"}`}>{a.verdict_reason}</p>
+
+          {points
+            .filter((p) => p.is_key)
+            .map((p) => (
+              <div key={p.id} role="note" className="mt-4 rounded-2xl border-2 border-white/70 bg-white/10 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider">★ Worth your attention</p>
+                <p className="mt-1 text-sm font-semibold">
+                  {p.ts_seconds != null && <span className="mr-2 tabular-nums opacity-80">{formatTime(p.ts_seconds)}</span>}
+                  {p.text}
+                </p>
+                {p.key_reason && <p className="mt-1.5 text-sm opacity-90">{p.key_reason}</p>}
+              </div>
+            ))}
 
           <p className={`mt-5 text-[10px] font-semibold uppercase tracking-wider ${low ? "text-muted" : "opacity-80"}`}>
             Point by point{a.goal_metric ? ` · Goal metric: ${a.goal_metric}` : ""}
@@ -155,8 +164,9 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
                   <PointToggle id={p.id} text={p.text} tone={low ? "light" : "dark"} />
                 </div>
                 {p.kind === "apply" && (
-                  <p className="mt-2 inline-block rounded-full bg-white px-3 py-1 text-xs font-medium text-navy">
-                    ↑ Moves {p.tag ?? "your goal"}
+                  <p className="mt-2 flex flex-wrap items-center gap-2">
+                    <span className="inline-block rounded-full bg-white px-3 py-1 text-xs font-medium text-navy">↑ Moves {p.tag ?? "your goal"}</span>
+                    {p.is_key && <span className="inline-block rounded-full border border-white/70 px-3 py-1 text-xs font-semibold">★ Key point</span>}
                   </p>
                 )}
                 {p.kind === "against" && (

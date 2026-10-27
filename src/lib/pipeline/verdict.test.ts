@@ -30,7 +30,7 @@ describe("finalize", () => {
     expect(out.points[0].tag).toBe("ARPA ↑");
     expect(out.points[1].tag).toBe("monthly ARPA ↓");
     expect(out.points[2].tag).toBeNull();
-    expect(out.verdict).toBe("low"); // 1 of 3 applies: below the 40% threshold
+    expect(out.verdict).toBe("partial"); // one applying point is enough
   });
 
   it("forces low when nothing applies, even if the model says strong", () => {
@@ -45,7 +45,7 @@ describe("finalize", () => {
     expect(out.verdict).toBe("low");
   });
 
-  it("overrides the model's verdict with the share of points that apply", () => {
+  it("overrides the model's verdict with the points that apply", () => {
     const out = finalize(
       {
         ...base,
@@ -58,20 +58,59 @@ describe("finalize", () => {
       },
       points,
     );
-    expect(out.verdict).toBe("low");
+    expect(out.verdict).toBe("partial"); // the model said strong, but only one of three applies
   });
 });
 
 describe("verdictFor", () => {
   it.each([
     [0, 5, "low"],
-    [1, 5, "low"],
+    [1, 5, "partial"],
     [2, 5, "partial"],
     [3, 5, "strong"],
     [5, 5, "strong"],
-    [1, 3, "low"],
-    [2, 4, "partial"],
+    [1, 3, "partial"],
     [2, 3, "strong"],
+    [2, 4, "partial"],
     [0, 0, "low"],
   ] as const)("%i of %i points gives %s", (applied, total, expected) => expect(verdictFor(applied, total)).toBe(expected));
+});
+
+describe("key points", () => {
+  const mk = (kind: "apply" | "na" | "against", key: boolean, key_reason: string | null) => ({
+    kind,
+    metric: kind === "na" ? null : "MRR",
+    direction: kind === "na" ? null : ("up" as const),
+    reason: "Because it matters.",
+    key,
+    key_reason,
+  });
+  const three = [
+    { tsSeconds: 10, text: "A" },
+    { tsSeconds: 20, text: "B" },
+    { tsSeconds: 30, text: "C" },
+  ];
+  it("keeps a key point on an applying point and its reason", () => {
+    const out = finalize(
+      { goal_metric: "MRR", verdict: "partial", verdict_reason: "One point applies and it matters.", points: [{ index: 1, ...mk("apply", true, "This could unlock your goal.") }, { index: 2, ...mk("na", false, null) }, { index: 3, ...mk("na", false, null) }] },
+      three,
+    );
+    expect(out.verdict).toBe("partial");
+    expect(out.points[0]).toMatchObject({ isKey: true, keyReason: "This could unlock your goal." });
+  });
+  it("ignores a key flag on a point that does not apply or has no reason", () => {
+    const out = finalize(
+      { goal_metric: "MRR", verdict: "low", verdict_reason: "Nothing applies to this founder.", points: [{ index: 1, ...mk("na", true, "x") }, { index: 2, ...mk("apply", true, null) }, { index: 3, ...mk("against", true, "y") }] },
+      three,
+    );
+    expect(out.points.every((p) => !p.isKey)).toBe(true);
+  });
+  it("keeps at most two key points", () => {
+    const out = finalize(
+      { goal_metric: "MRR", verdict: "strong", verdict_reason: "All three apply to this founder.", points: [1, 2, 3].map((index) => ({ index, ...mk("apply", true, "Matters a lot.") })) },
+      three,
+    );
+    expect(out.points.filter((p) => p.isKey)).toHaveLength(2);
+    expect(out.points[2].keyReason).toBeNull();
+  });
 });

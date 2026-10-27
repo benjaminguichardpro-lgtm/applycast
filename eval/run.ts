@@ -165,7 +165,7 @@ async function main() {
             profileText: `${profile.role}. Offer: ${profile.offer}. Stage: ${profile.stage}. Goal: ${profile.active_goal}. Constraint: ${profile.constraint_text}.`,
             verdict: scored.verdict,
             verdictReason: scored.verdictReason,
-            points: scored.points.map((p) => ({ ts: p.tsSeconds, text: p.text, kind: p.kind, tag: p.tag, reason: p.reason })),
+            points: scored.points.map((p) => ({ ts: p.tsSeconds, text: p.text, kind: p.kind, tag: p.tag, reason: p.reason, isKey: p.isKey, keyReason: p.keyReason })),
             adaptations,
             droppedAdaptations: dropped,
             latencyMs: Date.now() - started,

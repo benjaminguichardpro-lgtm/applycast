@@ -1,6 +1,6 @@
 // Pure helpers for the evaluation set: blind sheet, CSV, scoring. No network, no database.
 
-export type EvalPoint = { ts: number | null; text: string; kind: string; tag: string | null; reason: string };
+export type EvalPoint = { ts: number | null; text: string; kind: string; tag: string | null; reason: string; isKey?: boolean; keyReason?: string | null };
 export type EvalAdaptation = { target: string; category: string | null; text: string; effort: number };
 
 export type EvalResult = {
@@ -89,7 +89,8 @@ function describePoints(videoId: string, points: EvalPoint[]) {
     .map((p, i) => {
       const at = p.ts === null ? "no time" : `${clock(p.ts)} https://youtu.be/${videoId}?t=${Math.floor(p.ts)}`;
       const tag = p.tag ? ` ${p.tag}` : "";
-      return `${i + 1}. [${at}] ${p.kind.toUpperCase()}${tag}: ${p.text}\n   why: ${p.reason}`;
+      const key = p.isKey ? `\n   KEY POINT: ${p.keyReason ?? ""}` : "";
+      return `${i + 1}. [${at}] ${p.kind.toUpperCase()}${tag}: ${p.text}\n   why: ${p.reason}${key}`;
     })
     .join("\n");
 }

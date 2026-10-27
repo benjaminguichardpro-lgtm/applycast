@@ -94,6 +94,9 @@ export const insights = pgTable("insights", {
   kind: insightKindEnum("kind").notNull(),
   tag: text("tag"),
   reason: text("reason"),
+  // A point that could change a lot for this founder; key_reason says why (shown in a callout on the result).
+  isKey: boolean("is_key").notNull().default(false),
+  keyReason: text("key_reason"),
   // Longer summary generated on click: { summary, quotes: [{ text, ts }] }.
   detail: jsonb("detail"),
 });
