@@ -8,7 +8,7 @@ import { saveProfile } from "./actions";
 
 type SaveState = "idle" | "saving" | "error";
 
-const inputClass = "w-full rounded-2xl bg-field px-4 py-3 text-sm placeholder:text-muted/70";
+const inputClass = "w-full rounded-2xl bg-field px-4 py-3 text-sm placeholder:text-muted";
 const labelClass = "mb-1.5 block text-xs font-medium text-muted";
 
 function changedFields(draft: Profile, saved: Profile) {

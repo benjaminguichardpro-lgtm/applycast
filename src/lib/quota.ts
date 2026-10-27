@@ -7,10 +7,15 @@ export const FREE_MONTHLY_ANALYSES = 3;
 export async function getAnalysesLeft(supabase: SupabaseClient, userId: string) {
   const month = new Date().toISOString().slice(0, 7);
   const [{ data: user }, { data: usage }] = await Promise.all([
-    supabase.from("users").select("plan").eq("id", userId).single(),
+    supabase.from("users").select("plan, founding_member").eq("id", userId).single(),
     supabase.from("usage").select("analyses_count").eq("user_id", userId).eq("month", month).maybeSingle(),
   ]);
   const used = usage?.analyses_count ?? 0;
   const isPro = user?.plan === "pro";
-  return { isPro, used, left: isPro ? null : Math.max(0, FREE_MONTHLY_ANALYSES - used) };
+  return {
+    isPro,
+    isFounding: Boolean(user?.founding_member) && isPro,
+    used,
+    left: isPro ? null : Math.max(0, FREE_MONTHLY_ANALYSES - used),
+  };
 }

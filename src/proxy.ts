@@ -1,8 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-// /api/cron checks its own bearer secret (Vercel Cron has no user session).
-const PUBLIC_PATHS = ["/login", "/auth", "/api/cron"];
+// /api/cron and the Stripe webhook authenticate themselves (bearer secret, signature); neither has a user session.
+const PUBLIC_PATHS = ["/login", "/auth", "/api/cron", "/api/stripe/webhook"];
 
 // Refreshes the Supabase session cookie and sends anonymous visitors to /login.
 export async function proxy(request: NextRequest) {

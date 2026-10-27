@@ -39,6 +39,9 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   plan: planEnum("plan").notNull().default("free"),
   stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  // First 50 subscribers: price locked at the launch discount while the subscription stays active.
+  foundingMember: boolean("founding_member").notNull().default(false),
 });
 
 export const profiles = pgTable("profiles", {

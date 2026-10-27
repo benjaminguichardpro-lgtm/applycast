@@ -3,12 +3,13 @@
 import { after } from "next/server";
 import { getProfile, isProfileComplete } from "@/lib/profile-db";
 import { runAnalysis } from "@/lib/pipeline/run";
+import { getAnalysesLeft } from "@/lib/quota";
 import { createClient } from "@/lib/supabase/server";
 import { parseVideoId } from "@/lib/youtube";
 
 export type StartResult =
   | { ok: true; id: string }
-  | { ok: false; error: "invalid_url" | "profile_incomplete" | "unauthenticated" | "db_error" };
+  | { ok: false; error: "invalid_url" | "profile_incomplete" | "unauthenticated" | "db_error" | "quota_exceeded" };
 
 export async function startAnalysis(url: string): Promise<StartResult> {
   const videoId = parseVideoId(url);
@@ -22,6 +23,10 @@ export async function startAnalysis(url: string): Promise<StartResult> {
 
   const profile = await getProfile(supabase, user.id);
   if (!isProfileComplete(profile)) return { ok: false, error: "profile_incomplete" };
+
+  // Free plan: once the monthly analyses are used, a new analysis needs Pro. Plans, actions and check-ins are never gated.
+  const quota = await getAnalysesLeft(supabase, user.id);
+  if (!quota.isPro && quota.left === 0) return { ok: false, error: "quota_exceeded" };
 
   const { data, error } = await supabase
     .from("analyses")
@@ -40,7 +45,7 @@ export async function startAnalysis(url: string): Promise<StartResult> {
 export async function submitPastedTranscript(
   analysisId: string,
   text: string,
-): Promise<{ ok: true } | { ok: false; error: "too_short" | "too_long" | "not_found" | "profile_incomplete" }> {
+): Promise<{ ok: true } | { ok: false; error: "too_short" | "too_long" | "not_found" | "profile_incomplete" | "quota_exceeded" }> {
   const trimmed = text.trim();
   if (trimmed.length < 200) return { ok: false, error: "too_short" };
   if (trimmed.length > 400_000) return { ok: false, error: "too_long" };
@@ -60,6 +65,8 @@ export async function submitPastedTranscript(
 
   const profile = await getProfile(supabase, user.id);
   if (!isProfileComplete(profile)) return { ok: false, error: "profile_incomplete" };
+  const quota = await getAnalysesLeft(supabase, user.id);
+  if (!quota.isPro && quota.left === 0) return { ok: false, error: "quota_exceeded" };
 
   // created_at restarts so the stale-run check below measures this attempt, not the failed one.
   await supabase

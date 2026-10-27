@@ -214,7 +214,7 @@ export function PlanView({
                   value={daysInput}
                   onChange={(e) => setDaysInput(e.target.value)}
                   placeholder="e.g. 14"
-                  className="min-w-0 flex-1 rounded-full bg-navy-soft px-5 py-3 text-sm placeholder:text-white/50"
+                  className="min-w-0 flex-1 rounded-full bg-navy-soft px-5 py-3 text-sm placeholder:text-white/70"
                 />
                 <button
                   type="button"

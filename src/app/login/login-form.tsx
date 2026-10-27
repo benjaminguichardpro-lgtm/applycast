@@ -45,7 +45,7 @@ export function LoginForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@company.com"
-        className="w-full rounded-2xl bg-field px-4 py-3 text-sm placeholder:text-muted/70"
+        className="w-full rounded-2xl bg-field px-4 py-3 text-sm placeholder:text-muted"
       />
       <button
         type="submit"

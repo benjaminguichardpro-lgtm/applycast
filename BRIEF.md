@@ -43,7 +43,7 @@ Suppression d'une analyse : supprime plan et actions liés. Les check-ins déjà
 
 ## 5. Règles métier
 - Gratuit : 3 analyses par mois (reset le 1er). La 4e déclenche le paywall. Une analyse en échec et une analyse « Low match » ne sont pas comptées ; l'écran Low match l'indique clairement (décision du fondateur). Plans, actions et check-ins ne sont jamais verrouillés. L'historique reste lisible sans abonnement.
-- Pro : 15 $/mois, analyses illimitées. Annulation à tout moment.
+- Pro : 15 $/mois, analyses illimitées. Annulation à tout moment. Offre de lancement (décision du fondateur) : les 50 premiers abonnés sont « Founding Member », prix −50 % tant que l'abonnement reste actif (coupon Stripe plafonné à 50 utilisations ; annuler fait perdre la place). Suppression de compte : annule l'abonnement et supprime toutes les données.
 - Done rate = actions Done / actions validées (sur le mois). Pas de division par les analyses.
 - Limite d'effort hebdo : `profiles.weekly_hours_limit` (6 par défaut). Jauge « X h of 6 h » sur Adaptations, Plan et My actions. Dépassement : jauge en alerte et message « Over your limit by X h ». Regenerate sur un plan modifié : avertissement « This will replace your edits ».
 - Groupes d'actions : Today (jour ≤ 1), This week (≤ 7), Later.

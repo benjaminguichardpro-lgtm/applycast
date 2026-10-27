@@ -78,6 +78,8 @@ export function AnalyzeFlow({ profileReady, resumeId }: { profileReady: boolean;
     if (res.ok) {
       setStep("fetching");
       setView({ kind: "running", id: res.id });
+    } else if (res.error === "quota_exceeded") {
+      router.push("/upgrade");
     } else {
       setError(res.error);
     }
@@ -93,6 +95,8 @@ export function AnalyzeFlow({ profileReady, resumeId }: { profileReady: boolean;
     if (res.ok) {
       setStep("fetching");
       setView({ kind: "running", id: view.id });
+    } else if (res.error === "quota_exceeded") {
+      router.push("/upgrade");
     } else {
       setError(res.error);
     }
@@ -124,7 +128,7 @@ export function AnalyzeFlow({ profileReady, resumeId }: { profileReady: boolean;
               onChange={(e) => setUrl(e.target.value)}
               disabled={!profileReady}
               placeholder="Paste a YouTube URL — https://youtube.com/watch?v=…"
-              className="min-w-0 flex-1 rounded-full bg-field px-5 py-3.5 text-sm placeholder:text-muted/70"
+              className="min-w-0 flex-1 rounded-full bg-field px-5 py-3.5 text-sm placeholder:text-muted"
             />
             <button
               type="submit"
