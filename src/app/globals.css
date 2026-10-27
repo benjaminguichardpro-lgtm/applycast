@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Tokens sampled from design-reference direction A (Outfit, white cards on pale shell, radius 28). */
+:root {
+  --page: #d5dce6;
+  --shell: #edf0f7;
+  --card: #ffffff;
+  --field: #f1f4f9;
+  --chip: #e1e8f7;
+  --ink: #141b2d;
+  --muted: #5a6478;
+  --line: #d3d9e6;
+  --navy: #1d3666;
+  --navy-soft: #2c4677;
+  --on-navy: #ffffff;
+  --primary: #2f5bd6;
+  --warn: #b42318;
+}
+
+[data-theme="dark"] {
+  --page: #0b0f1a;
+  --shell: #121828;
+  --card: #1a2237;
+  --field: #232c45;
+  --chip: #2a3555;
+  --ink: #eef1f8;
+  --muted: #a3adc4;
+  --line: #2f3a58;
+  --navy: #0e1a38;
+  --navy-soft: #1c2c55;
+  --on-navy: #ffffff;
+  --primary: #7b9bff;
+  --warn: #ff8a80;
+}
+
+@theme inline {
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --color-page: var(--page);
+  --color-shell: var(--shell);
+  --color-card: var(--card);
+  --color-field: var(--field);
+  --color-chip: var(--chip);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-navy: var(--navy);
+  --color-navy-soft: var(--navy-soft);
+  --color-on-navy: var(--on-navy);
+  --color-primary: var(--primary);
+  --color-warn: var(--warn);
+  --radius-shell: 28px;
+}
+
+body {
+  background: var(--shell);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
