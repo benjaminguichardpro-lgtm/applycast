@@ -5,3 +5,8 @@ node_modules
 next-env.d.ts
 *.tsbuildinfo
 .DS_Store
+
+# Evaluation set: downloaded transcripts, run outputs and bundles stay local.
+eval/cache
+eval/out
+.eval-build

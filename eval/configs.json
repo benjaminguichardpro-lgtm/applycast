@@ -1,0 +1,18 @@
+[
+  {
+    "name": "openai",
+    "enabled": true,
+    "steps": {
+      "extract": { "provider": "openai", "model": "gpt-6-luna" },
+      "verdict": { "provider": "openai", "model": "gpt-6.1-terra" }
+    }
+  },
+  {
+    "name": "anthropic",
+    "enabled": false,
+    "steps": {
+      "extract": { "provider": "anthropic", "model": "claude-haiku-5-5" },
+      "verdict": { "provider": "anthropic", "model": "claude-sonnet-5-5" }
+    }
+  }
+]
