@@ -26,16 +26,33 @@ const items = [
 
 export function Faq() {
   return (
-    <section id="faq" className="mx-auto mt-28 max-w-[800px] scroll-mt-8 px-4">
-      <h2 {...reveal()} className="text-center text-lg font-medium">FAQ</h2>
-      <div className="mt-8 border-t border-line">
+    <section id="faq" className="mx-auto mt-28 grid max-w-[1136px] scroll-mt-8 gap-10 px-4 lg:grid-cols-2 lg:gap-16">
+      <div {...reveal()}>
+        <span className="inline-flex items-center gap-2 rounded-xl border border-line/60 bg-card/60 px-3 py-1.5 text-sm text-muted dark:border-line">
+          <span className="grid h-5 w-5 place-items-center rounded-full bg-primary text-[11px] font-bold text-on-navy" aria-hidden="true">?</span>
+          FAQ
+        </span>
+        <h2 className="mt-6 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
+          Frequently
+          <br />
+          asked questions
+        </h2>
+        <p className="mt-6 text-lg text-muted">Everything you need to know about Applycast.</p>
+      </div>
+
+      <div className="space-y-5">
         {items.map((i, n) => (
-          <details key={i.q} {...reveal(n)} className="group border-b border-line">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-sm font-medium [&::-webkit-details-marker]:hidden">
+          <details key={i.q} {...reveal(n + 1, "right")} className="faq-item group rounded-[36px] border border-line/60 bg-card dark:border-line">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-6 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
               {i.q}
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-card text-base transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+              <span
+                className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-lg leading-none text-on-navy transition-transform duration-300 group-open:rotate-45"
+                aria-hidden="true"
+              >
+                +
+              </span>
             </summary>
-            <p className="pb-5 pr-12 text-sm leading-relaxed text-muted">{i.a}</p>
+            <p className="px-6 pb-6 pr-16 text-sm leading-relaxed text-muted">{i.a}</p>
           </details>
         ))}
       </div>

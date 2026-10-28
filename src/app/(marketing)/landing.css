@@ -241,6 +241,23 @@ html[data-scrolled] .site-header-inner {
   }
 }
 
+/* ── FAQ cards open with a smooth height transition where the browser supports it ── */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (interpolate-size: allow-keywords) {
+    .faq-item {
+      interpolate-size: allow-keywords;
+    }
+    .faq-item::details-content {
+      block-size: 0;
+      overflow: clip;
+      transition: block-size 0.35s ease, content-visibility 0.35s allow-discrete;
+    }
+    .faq-item[open]::details-content {
+      block-size: auto;
+    }
+  }
+}
+
 /* ── A slow brand-coloured light travelling around a border (hero field, Pro card) ── */
 @property --a {
   syntax: "<angle>";
