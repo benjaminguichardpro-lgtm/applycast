@@ -10,23 +10,21 @@
 }
 
 /* ── Hero backdrop: like a stage light behind the content below the hero ──
-   Clean at the top; fluted-glass streaks rise from the bottom, strongest at the left and right edges,
-   with the centre left clear. The streaks drift sideways very slowly. */
+   Clean at the top; a soft glow rises from the bottom, strongest at the left and right edges, centre clear.
+   It is seen through regular 78px "ribbed glass" columns: each is tinted on its right side and falls back to the
+   page colour at its left edge (never to white, which would read as slats on a grey page), with a hairline
+   highlight and a faint column-to-column variation. */
 .hero-glow {
-  --flute: rgba(255, 255, 255, 0.62);
   position: absolute;
   z-index: -1;
-  top: 340px;
+  top: 300px;
   left: 50%;
   width: 100vw;
-  height: 700px;
+  height: 740px;
   translate: -50% 0;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 40%, #000 66%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 40%, #000 66%, transparent 100%);
-}
-[data-theme="dark"] .hero-glow {
-  --flute: rgba(0, 0, 0, 0.5);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 45%, #000 68%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 45%, #000 68%, transparent 100%);
 }
 .hero-glow::before,
 .hero-glow::after {
@@ -35,25 +33,19 @@
   inset: 0;
 }
 .hero-glow::before {
-  filter: blur(18px);
+  filter: blur(16px);
   background:
-    radial-gradient(40% 90% at 0% 88%, color-mix(in srgb, var(--primary) 64%, transparent), transparent),
-    radial-gradient(40% 90% at 100% 88%, color-mix(in srgb, var(--primary) 64%, transparent), transparent),
-    radial-gradient(75% 48% at 50% 108%, color-mix(in srgb, var(--primary) 34%, transparent), transparent);
+    radial-gradient(42% 92% at 0% 90%, color-mix(in srgb, var(--primary) 66%, transparent), transparent),
+    radial-gradient(42% 92% at 100% 90%, color-mix(in srgb, var(--primary) 66%, transparent), transparent),
+    radial-gradient(78% 50% at 50% 110%, color-mix(in srgb, var(--primary) 30%, transparent), transparent);
 }
-/* Each flute is bright on its left edge and fades to nothing, like light through ribbed glass.
-   Two periods (53px, 89px) are layered so the pattern never looks mechanical. */
 .hero-glow::after {
   background-image:
-    repeating-linear-gradient(90deg, var(--flute) 0, transparent 36px, transparent 53px),
-    repeating-linear-gradient(90deg, transparent 0, var(--flute) 4px, transparent 30px, transparent 89px);
-  background-size: 53px 100%, 89px 100%;
-  animation: flute-drift 90s linear infinite;
-}
-@keyframes flute-drift {
-  to {
-    background-position: 53px 0, -89px 0;
-  }
+    linear-gradient(90deg, color-mix(in srgb, var(--card) 38%, transparent) 0, color-mix(in srgb, var(--card) 38%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--page) 74%, transparent) 0, color-mix(in srgb, var(--page) 48%, transparent) 6px, color-mix(in srgb, var(--page) 14%, transparent) 46px, transparent 78px),
+    linear-gradient(90deg, color-mix(in srgb, var(--page) 34%, transparent) 0 78px, transparent 78px 156px, color-mix(in srgb, var(--page) 14%, transparent) 156px 234px, transparent 234px 312px);
+  background-size: 78px 100%, 78px 100%, 312px 100%;
+  background-repeat: repeat-x;
 }
 /* Parallax: the backdrop lags behind the page while the hero scrolls away (where supported). */
 @supports (animation-timeline: scroll()) {
