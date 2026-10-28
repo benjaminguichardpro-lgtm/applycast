@@ -1,4 +1,5 @@
 import { FREE_MONTHLY_ANALYSES } from "@/lib/quota";
+import { reveal } from "./reveal";
 
 const items = [
   {
@@ -26,13 +27,13 @@ const items = [
 export function Faq() {
   return (
     <section id="faq" className="mx-auto mt-28 max-w-[800px] scroll-mt-8 px-4">
-      <h2 className="text-center text-lg font-medium">FAQ</h2>
+      <h2 {...reveal()} className="text-center text-lg font-medium">FAQ</h2>
       <div className="mt-8 border-t border-line">
-        {items.map((i) => (
-          <details key={i.q} className="group border-b border-line">
+        {items.map((i, n) => (
+          <details key={i.q} {...reveal(n)} className="group border-b border-line">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-sm font-medium [&::-webkit-details-marker]:hidden">
               {i.q}
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-card text-base group-open:rotate-45" aria-hidden="true">+</span>
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-card text-base transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
             </summary>
             <p className="pb-5 pr-12 text-sm leading-relaxed text-muted">{i.a}</p>
           </details>

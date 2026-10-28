@@ -1,8 +1,10 @@
+import { reveal } from "./reveal";
+
 const chip = "rounded-full px-3 py-1 text-[11px] font-semibold";
 
 function Step({ n, title, children, visual }: { n: number; title: string; children: React.ReactNode; visual: React.ReactNode }) {
   return (
-    <li className="flex flex-col rounded-3xl border border-line/60 bg-card p-5 shadow-sm dark:border-line">
+    <li {...reveal(n - 1)} className="lift flex flex-col rounded-3xl border border-line/60 bg-card p-5 shadow-sm dark:border-line">
       <div className="flex items-center gap-3">
         <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-on-navy">{n}</span>
         <h3 className="text-lg font-medium">{title}</h3>
@@ -16,7 +18,7 @@ function Step({ n, title, children, visual }: { n: number; title: string; childr
 export function HowItWorks() {
   return (
     <section id="how-it-works" className="mx-auto mt-24 max-w-[1136px] scroll-mt-8 px-4">
-      <h2 className="text-center text-lg font-medium">How it works</h2>
+      <h2 {...reveal()} className="text-center text-lg font-medium">How it works</h2>
       <ol className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Step
           n={1}
@@ -54,7 +56,7 @@ export function HowItWorks() {
           visual={
             <div>
               <div className="h-2 rounded-full bg-field" role="img" aria-label="4 h 15 of 6 h planned">
-                <div className="h-2 w-[72%] rounded-full bg-primary" />
+                <div className="fill h-2 rounded-full bg-primary" style={{ "--w": "72%" } as React.CSSProperties} />
               </div>
               <p className="mt-2 text-[11px] text-muted">4 steps · 4 h 15 of 6 h</p>
             </div>
@@ -67,9 +69,9 @@ export function HowItWorks() {
           title="Check in at day 7"
           visual={
             <div className="flex flex-wrap gap-2">
-              <span className={`${chip} bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300`}>Done</span>
-              <span className={`${chip} bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300`}>Postponed</span>
-              <span className={`${chip} bg-field text-muted`}>Dropped</span>
+              <span style={{ "--i": 0 } as React.CSSProperties} className={`pop ${chip} bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300`}>Done</span>
+              <span style={{ "--i": 1 } as React.CSSProperties} className={`pop ${chip} bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300`}>Postponed</span>
+              <span style={{ "--i": 2 } as React.CSSProperties} className={`pop ${chip} bg-field text-muted`}>Dropped</span>
             </div>
           }
         >

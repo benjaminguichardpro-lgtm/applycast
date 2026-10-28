@@ -1,0 +1,184 @@
+/* Landing-only motion. Everything is progressive: without JS the content is simply visible, and
+   prefers-reduced-motion switches every animation off. Colours come from the app tokens (--primary…). */
+
+/* Sober smooth scrolling for the in-page anchors, offset for the sticky header. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has([data-landing]) {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+}
+
+/* ── Hero backdrop: fluted-glass ridges over a glow that rises from the bottom ── */
+.hero-glow {
+  --ridge: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  z-index: -1;
+  top: -150px;
+  left: 50%;
+  width: 100vw;
+  height: 840px;
+  translate: -50% 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 38%, #000 66%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 38%, #000 66%, transparent 100%);
+}
+[data-theme="dark"] .hero-glow {
+  --ridge: rgba(0, 0, 0, 0.42);
+}
+.hero-glow::before,
+.hero-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.hero-glow::before {
+  background:
+    radial-gradient(110% 62% at 50% 100%, color-mix(in srgb, var(--primary) 42%, transparent), transparent 72%),
+    radial-gradient(60% 40% at 18% 92%, color-mix(in srgb, var(--primary) 28%, transparent), transparent 70%),
+    radial-gradient(60% 40% at 84% 96%, color-mix(in srgb, var(--primary) 28%, transparent), transparent 70%);
+}
+.hero-glow::after {
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0, var(--ridge) 19px, transparent 38px, transparent 59px),
+    repeating-linear-gradient(90deg, transparent 0, var(--ridge) 11px, transparent 22px, transparent 63px);
+  background-size: 97px 100%, 85px 100%;
+  animation: ridge-drift 80s linear infinite;
+}
+@keyframes ridge-drift {
+  to {
+    background-position: 97px 0, -85px 0;
+  }
+}
+/* Parallax: the backdrop lags behind the page while the hero scrolls away (where supported). */
+@supports (animation-timeline: scroll()) {
+  .hero-glow {
+    animation: glow-parallax linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 800px;
+  }
+}
+@keyframes glow-parallax {
+  to {
+    transform: translateY(150px);
+    opacity: 0.25;
+  }
+}
+
+/* ── Sticky header: floats as a frosted pill once the page has scrolled ── */
+.site-header-inner {
+  border: 1px solid transparent;
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, backdrop-filter 0.3s;
+}
+html[data-scrolled] .site-header-inner {
+  background: color-mix(in srgb, var(--card) 78%, transparent);
+  border-color: var(--line);
+  box-shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+}
+
+/* ── Reveal on scroll (once). `rv` is set by an inline script, so no-JS visitors see everything ── */
+@media (prefers-reduced-motion: no-preference) {
+  .rv [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+    transition:
+      opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--d, 0) * 90ms),
+      transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--d, 0) * 90ms);
+  }
+  /* The hero drops in from slightly above, scaled down to size. */
+  .rv [data-reveal="drop"] {
+    transform: translate3d(0, -20px, 0) scale(1.12);
+  }
+  .rv [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+  /* Once revealed, give hover effects back their own (fast) transitions. */
+  .rv [data-reveal].is-in.done {
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease,
+      background-color 0.25s ease;
+  }
+
+  /* Progress bar fills, chips pop in, once their card is revealed. */
+  .fill {
+    transition: width 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) 0.35s;
+  }
+  .rv [data-reveal]:not(.is-in) .fill {
+    width: 0;
+  }
+  .pop {
+    transition:
+      opacity 0.5s ease calc(0.4s + var(--i, 0) * 130ms),
+      transform 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) calc(0.4s + var(--i, 0) * 130ms);
+  }
+  .rv [data-reveal]:not(.is-in) .pop {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+.fill {
+  width: var(--w, 100%);
+}
+
+/* ── Hover: cards lift and pick up a hint of the brand colour ── */
+.lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.lift:hover,
+.rv [data-reveal].lift:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--primary) 40%, var(--line));
+  box-shadow: 0 18px 40px -22px color-mix(in srgb, var(--primary) 55%, transparent);
+}
+
+/* ── Buttons: a sheen sweeps across on hover ── */
+.btn-shine {
+  background-image: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.32) 50%, transparent 65%);
+  background-size: 260% 100%;
+  background-position: 130% 0;
+  background-repeat: no-repeat;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-shine:hover {
+    background-position: -30% 0;
+    transition: background-position 0.9s ease;
+  }
+}
+
+/* ── A slow brand-coloured light travelling around a border (hero field, Pro card) ── */
+@property --a {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.glow-border {
+  position: relative;
+}
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--a), transparent 0 58%, var(--primary) 82%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .glow-border::before {
+    animation: border-spin 7s linear infinite;
+  }
+}
+@keyframes border-spin {
+  to {
+    --a: 360deg;
+  }
+}
