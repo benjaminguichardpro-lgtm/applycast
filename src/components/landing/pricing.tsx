@@ -4,6 +4,7 @@ import { appLink } from "@/lib/site";
 import { CountUp } from "./count-up";
 import { reveal } from "./reveal";
 import { outlineButton, primaryButton } from "./buttons";
+import { RollLabel } from "./roll-label";
 
 function Item({ children }: { children: React.ReactNode }) {
   return (
@@ -34,7 +35,7 @@ export function Pricing() {
             </Item>
             <Item>Plans, actions and check-ins never locked</Item>
           </ul>
-          <a href={appLink("/login")} className={`${outlineButton} mt-auto`}>Try it free</a>
+          <a href={appLink("/login")} className={`${outlineButton} mt-auto`}><RollLabel>Try it free</RollLabel></a>
         </div>
         <div className="glow-border flex flex-col rounded-3xl border border-line/60 bg-card p-6 dark:border-line">
           <div className="flex items-baseline justify-between">
@@ -54,7 +55,7 @@ export function Pricing() {
           <p className="mt-5 rounded-2xl bg-field p-3 text-xs text-muted">
             <strong className="text-ink">Founding offer:</strong> the first 50 subscribers pay {FOUNDING_DISCOUNT_PERCENT}% less, for as long as they stay subscribed.
           </p>
-          <a href={appLink("/upgrade")} className={`${primaryButton} mt-5 !py-3`}>Claim a Founding spot</a>
+          <a href={appLink("/upgrade")} className={`${primaryButton} mt-5 !py-3`}><RollLabel>Claim a Founding spot</RollLabel></a>
         </div>
       </div>
     </section>

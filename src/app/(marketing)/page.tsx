@@ -6,6 +6,7 @@ import { reveal } from "@/components/landing/reveal";
 import { primaryButton } from "@/components/landing/buttons";
 import { FREE_MONTHLY_ANALYSES } from "@/lib/quota";
 import { MARKETING_URL, appLink } from "@/lib/site";
+import { RollLabel } from "@/components/landing/roll-label";
 
 export const metadata: Metadata = {
   metadataBase: new URL(MARKETING_URL),
@@ -39,7 +40,7 @@ export default function Landing() {
               placeholder="Paste a podcast, interview or talk"
               className="min-w-0 flex-1 rounded-full bg-field px-5 py-3 text-sm outline-none placeholder:text-muted focus-visible:ring-2 focus-visible:ring-primary"
             />
-            <button type="submit" className={`${primaryButton} shrink-0 !py-3`}>Try it free</button>
+            <button type="submit" className={`${primaryButton} shrink-0 !py-3`}><RollLabel>Try it free</RollLabel></button>
           </div>
           <p className="mt-3 text-xs text-muted">
             Free plan: {FREE_MONTHLY_ANALYSES} analyses a month.{" "}
@@ -56,7 +57,7 @@ export default function Landing() {
         <div {...reveal()} className="rounded-[28px] border border-line/60 bg-card/60 p-3 dark:border-line">
           <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-card p-8 sm:flex-row sm:items-center sm:px-10 sm:py-8">
             <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Turn your next video into done.</h2>
-            <a href={appLink("/login")} className={`${primaryButton} !py-3`}>Try it free</a>
+            <a href={appLink("/login")} className={`${primaryButton} !py-3`}><RollLabel>Try it free</RollLabel></a>
           </div>
         </div>
       </section>

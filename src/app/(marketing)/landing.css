@@ -191,17 +191,41 @@ html[data-scrolled] .site-header-inner {
   box-shadow: 0 18px 40px -22px color-mix(in srgb, var(--primary) 55%, transparent);
 }
 
-/* ── Buttons: a sheen sweeps across on hover ── */
-.btn-shine {
-  background-image: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.32) 50%, transparent 65%);
-  background-size: 260% 100%;
-  background-position: 130% 0;
-  background-repeat: no-repeat;
+/* ── Buttons (as in the reference): on hover the label's letters roll up one after another,
+   the filled button brightens and glows, the outlined one gets a soft shadow ── */
+.btn-primary,
+.btn-outline {
+  transition: filter 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.btn-primary:hover {
+  filter: brightness(1.12) saturate(1.05);
+  box-shadow: 0 10px 26px -10px color-mix(in srgb, var(--primary) 75%, transparent);
+}
+.btn-outline:hover {
+  border-color: color-mix(in srgb, var(--primary) 30%, var(--line));
+  box-shadow: 0 8px 22px -12px rgba(0, 0, 0, 0.35);
+}
+.roll {
+  display: inline-flex;
+  height: 1.25em;
+  overflow: hidden;
+  line-height: 1.25em;
+}
+.roll-ch {
+  display: flex;
+  flex-direction: column;
+}
+.roll-ch > span {
+  display: block;
+  height: 1.25em;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .btn-shine:hover {
-    background-position: -30% 0;
-    transition: background-position 0.9s ease;
+  .roll-ch {
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 16ms);
+  }
+  .btn-roll:hover .roll-ch,
+  .btn-roll:focus-visible .roll-ch {
+    transform: translateY(-50%);
   }
 }
 

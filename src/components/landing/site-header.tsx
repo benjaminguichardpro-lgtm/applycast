@@ -3,6 +3,7 @@ import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { appLink } from "@/lib/site";
 import { primaryButton } from "./buttons";
+import { RollLabel } from "./roll-label";
 
 const links = [
   { href: "/#how-it-works", label: "How it works" },
@@ -29,7 +30,7 @@ export function SiteHeader() {
             Sign in
           </a>
           <a href={appLink("/login")} className={`${primaryButton} !px-4 !py-2 text-xs`}>
-            Try it free
+            <RollLabel>Try it free</RollLabel>
           </a>
           <ThemeToggle />
           <details className="relative md:hidden">
