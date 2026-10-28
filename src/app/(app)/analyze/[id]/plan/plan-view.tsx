@@ -8,6 +8,7 @@ import { EffortGauge } from "@/components/effort-gauge";
 import { EFFORT_OPTIONS, formatHours, overBy, perWeekHours, round1, totalHours } from "@/lib/effort";
 import { MAX_DAYS, MIN_DAYS } from "@/lib/pipeline/plan";
 import { regeneratePlan, validatePlan } from "../actions";
+import { RedoPlan } from "./redo-plan";
 
 type Step = { id: string; day: number; text: string; effort: number };
 
@@ -192,6 +193,7 @@ export function PlanView({
               <Link href="/actions" className="mt-6 block rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-navy">
                 Go to My actions
               </Link>
+              <RedoPlan analysisId={analysisId} />
             </>
           ) : (
             <>

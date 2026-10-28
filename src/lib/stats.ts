@@ -52,7 +52,8 @@ export async function getMonthStats(supabase: SupabaseClient, userId: string): P
 
   const [quota, { data: monthPlans }, { data: allPlans }, { data: checkins }, { data: analyses }] = await Promise.all([
     getAnalysesLeft(supabase, userId),
-    supabase.from("plans").select("id").eq("status", "validated").gte("validated_at", startIso),
+    // Archived plans (replaced by a redo) were validated too: what was done in them still counts.
+    supabase.from("plans").select("id").in("status", ["validated", "archived"]).gte("validated_at", startIso),
     supabase.from("plans").select("id"),
     supabase.from("checkins").select("plan_id, actions_total, actions_done").gte("created_at", startIso),
     supabase.from("analyses").select("verdict").eq("status", "done").is("deleted_at", null).gte("created_at", startIso),

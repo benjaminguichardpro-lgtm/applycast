@@ -17,13 +17,13 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
   const { data: analysis } = await supabase.from("analyses").select("id").eq("id", id).is("deleted_at", null).maybeSingle();
   if (!analysis) notFound();
 
-  // A validated plan wins over a leftover draft.
+  // A validated plan wins over a leftover draft; archived plans (replaced by a redo) are history.
   const { data: plans } = await supabase
     .from("plans")
     .select("id, duration_days, status, validated_at, checkin_due_at")
     .eq("analysis_id", id)
     .order("status", { ascending: false });
-  const plan = plans?.find((p) => p.status === "validated") ?? plans?.[0];
+  const plan = plans?.find((p) => p.status === "validated") ?? plans?.find((p) => p.status === "draft");
   if (!plan) redirect(`/analyze/${id}/adaptations`);
 
   const [{ data: steps }, profile] = await Promise.all([

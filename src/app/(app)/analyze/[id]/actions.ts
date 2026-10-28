@@ -166,6 +166,31 @@ export async function regeneratePlan(
   }
 }
 
+// Redo a validated plan because the goal, the schedule or the constraints changed. The old plan is archived, not
+// deleted: the actions already done stay counted in the stats, the open ones leave My actions. Nothing is lost.
+// With refreshAdaptations the adaptations are rewritten for the current context before the user rebuilds the plan.
+export async function redoPlan(
+  analysisId: string,
+  refreshAdaptations: boolean,
+): Promise<{ ok: true } | Fail<"not_found" | "nothing_to_adapt" | "failed">> {
+  const s = await session();
+  if (!s) return { ok: false, error: "not_found" };
+  const { supabase } = s;
+
+  const { data: plan } = await supabase.from("plans").select("id").eq("analysis_id", analysisId).eq("status", "validated").maybeSingle();
+  if (!plan) return { ok: false, error: "not_found" };
+
+  if (refreshAdaptations) {
+    // Done first: if it fails, the validated plan is still in place.
+    await supabase.from("adaptations").delete().eq("analysis_id", analysisId);
+    const res = await generateAdaptations(analysisId);
+    if (!res.ok) return { ok: false, error: res.error === "nothing_to_adapt" ? "nothing_to_adapt" : "failed" };
+  }
+
+  const { error } = await supabase.from("plans").update({ status: "archived" }).eq("id", plan.id).eq("status", "validated");
+  return error ? { ok: false, error: "failed" } : { ok: true };
+}
+
 const validateSchema = z
   .object({
     durationDays: z.number().int().min(MIN_DAYS).max(MAX_DAYS),
