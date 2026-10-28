@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Faq } from "@/components/landing/faq";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { Pricing } from "@/components/landing/pricing";
@@ -47,6 +48,20 @@ export default function Landing() {
             <a href="#how-it-works" className="text-primary underline">See how it works</a>
           </p>
         </form>
+
+        {/* The product, framed like the reference: a glass ring around the screenshot, full content width. */}
+        <div {...reveal(8)} className="hero-frame mx-auto mt-14 rounded-[28px] border border-white/70 bg-white/45 p-2.5 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.35)] backdrop-blur-sm sm:mt-16 sm:p-4 dark:border-line dark:bg-card/30">
+          <div className="relative aspect-[6/5] overflow-hidden rounded-2xl border border-line/60 bg-card sm:aspect-auto">
+            <Image
+              src="/screens/adaptations.png"
+              alt="The Applycast adaptations screen: each point from the video on the left, turned into an action for your business on the right, with the effort it takes."
+              width={2940}
+              height={1542}
+              sizes="(min-width: 1136px) 1072px, 100vw"
+              className="absolute -left-[6%] -top-[22%] h-auto w-[240%] max-w-none sm:static sm:w-full sm:max-w-full"
+            />
+          </div>
+        </div>
       </section>
 
       <HowItWorks />
