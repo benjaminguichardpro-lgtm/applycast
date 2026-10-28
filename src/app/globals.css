@@ -36,7 +36,7 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --color-page: var(--page);
   --color-shell: var(--shell);
   --color-card: var(--card);
