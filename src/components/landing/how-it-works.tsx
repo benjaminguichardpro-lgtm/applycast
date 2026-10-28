@@ -17,7 +17,7 @@ function Step({ n, title, children, visual }: { n: number; title: string; childr
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="mx-auto mt-24 max-w-[1136px] scroll-mt-8 px-4">
+    <section id="how-it-works" className="relative mx-auto mt-24 max-w-[1136px] scroll-mt-8 px-4">
       <h2 {...reveal()} className="text-center text-lg font-medium">How it works</h2>
       <ol className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Step
