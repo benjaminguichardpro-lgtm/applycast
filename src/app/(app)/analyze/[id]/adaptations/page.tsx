@@ -18,11 +18,13 @@ export default async function AdaptationsPage({ params }: { params: Promise<{ id
   if (!a) notFound();
   if (a.status !== "done" || a.verdict === "low") redirect(`/analyze/${id}`);
 
-  const [{ data: insights }, { data: adaptations }, profile] = await Promise.all([
+  const [{ data: insights }, { data: adaptations }, profile, { data: plans }] = await Promise.all([
     supabase.from("insights").select("id, ts_seconds, text, kind, tag, reason").eq("analysis_id", id).order("position", { ascending: true }),
     supabase.from("adaptations").select("id, insight_id, target, category, text, effort_hours, selected").eq("analysis_id", id),
     getProfile(supabase, user.id),
+    supabase.from("plans").select("status").eq("analysis_id", id),
   ]);
+  const planReady = (plans ?? []).some((p) => p.status === "validated");
 
   const points = insights ?? [];
   if (!adaptations || adaptations.length === 0) {
@@ -50,6 +52,7 @@ export default async function AdaptationsPage({ params }: { params: Promise<{ id
   return (
     <AdaptationsView
       analysisId={id}
+      planReady={planReady}
       items={items}
       leftOut={leftOut}
       goalMetric={a.goal_metric}

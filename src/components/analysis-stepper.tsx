@@ -6,8 +6,17 @@ const STEPS = [
   { key: "plan", label: "Action plan", path: "/plan" },
 ] as const;
 
-// Where the user is in analysis → adaptations → plan. Earlier steps link back; later ones are not reachable yet.
-export function AnalysisStepper({ analysisId, current }: { analysisId: string; current: (typeof STEPS)[number]["key"] }) {
+// Where the user is in analysis → adaptations → plan. Earlier steps link back; later ones are not reachable yet,
+// except the plan once one has been validated (planReady).
+export function AnalysisStepper({
+  analysisId,
+  current,
+  planReady = false,
+}: {
+  analysisId: string;
+  current: (typeof STEPS)[number]["key"];
+  planReady?: boolean;
+}) {
   const at = STEPS.findIndex((s) => s.key === current);
   return (
     <nav aria-label="Progress">
@@ -24,12 +33,13 @@ export function AnalysisStepper({ analysisId, current }: { analysisId: string; c
               {state === "done" ? "✓" : i + 1}
             </span>
           );
+          const linked = state === "done" || (s.key === "plan" && planReady && state === "todo");
           const cls = `flex items-center gap-2 rounded-full px-3 py-1.5 ${
-            state === "current" ? "bg-card font-semibold shadow-sm" : state === "done" ? "hover:bg-card" : "text-muted"
+            state === "current" ? "bg-card font-semibold shadow-sm" : linked ? "hover:bg-card" : "text-muted"
           }`;
           return (
             <li key={s.key} className="flex items-center gap-2">
-              {state === "done" ? (
+              {linked ? (
                 <Link href={`/analyze/${analysisId}${s.path}`} className={cls}>
                   {badge}
                   {s.label}

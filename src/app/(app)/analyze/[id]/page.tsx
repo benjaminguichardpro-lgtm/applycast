@@ -47,6 +47,9 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
     .order("position", { ascending: true });
   const points = insights ?? [];
   const quota = await getAnalysesLeft(supabase, user.id);
+  // Once a plan is validated it can no longer be rebuilt, so the page must lead to it.
+  const { data: plans } = await supabase.from("plans").select("status").eq("analysis_id", id);
+  const planReady = (plans ?? []).some((p) => p.status === "validated");
   const applied = points.filter((p) => p.kind === "apply").length;
   const verdict = a.verdict as Verdict;
   const low = verdict === "low";
@@ -59,7 +62,7 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
     <section>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <AnalysisStepper analysisId={id} current="result" />
+          <AnalysisStepper analysisId={id} current="result" planReady={planReady} />
           <h1 className="mt-2 text-4xl font-medium tracking-tight">What this video says, and whether it’s for you</h1>
         </div>
         <Link href="/analyze" className="rounded-full border border-line px-4 py-2 text-sm">
@@ -213,9 +216,18 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
             </>
           ) : (
             <>
+              {planReady && (
+                <Link href={`/analyze/${id}/plan`} className="mt-4 block rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-navy">
+                  Open your action plan
+                </Link>
+              )}
               <Link
                 href={`/analyze/${id}/adaptations`}
-                className="mt-4 block rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-navy"
+                className={
+                  planReady
+                    ? "mt-2 block rounded-full border border-white/40 px-5 py-3 text-center text-sm font-medium"
+                    : "mt-4 block rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-navy"
+                }
               >
                 See the {applied} adaptation{applied === 1 ? "" : "s"}
               </Link>
