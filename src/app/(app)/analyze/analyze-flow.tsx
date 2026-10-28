@@ -112,9 +112,9 @@ export function AnalyzeFlow({ profileReady, resumeId }: { profileReady: boolean;
   }
 
   return (
-    <div className="rounded-shell bg-card p-6 sm:p-8">
+    <div className="rounded-shell bg-card p-6 sm:p-10">
       <div className="flex items-baseline justify-between">
-        <h2 className="text-xl font-medium">New analysis</h2>
+        <h2 className="text-2xl font-medium">New analysis</h2>
         <span className="text-xs text-muted">YouTube links only</span>
       </div>
 
@@ -128,12 +128,12 @@ export function AnalyzeFlow({ profileReady, resumeId }: { profileReady: boolean;
               onChange={(e) => setUrl(e.target.value)}
               disabled={!profileReady}
               placeholder="Paste a YouTube URL — https://youtube.com/watch?v=…"
-              className="min-w-0 flex-1 rounded-full bg-field px-5 py-3.5 text-sm placeholder:text-muted"
+              className="min-w-0 flex-1 rounded-full bg-field px-6 py-4 text-base placeholder:text-muted"
             />
             <button
               type="submit"
               disabled={!profileReady || busy || !url.trim()}
-              className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white disabled:opacity-50 dark:text-navy"
+              className="rounded-full bg-primary px-10 py-4 text-base font-semibold text-white disabled:opacity-50"
             >
               {busy ? "Starting…" : "Analyze"}
             </button>
@@ -175,7 +175,7 @@ export function AnalyzeFlow({ profileReady, resumeId }: { profileReady: boolean;
             <button
               type="button"
               onClick={() => setView({ kind: "paste", id: view.id, title: view.title })}
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white dark:text-navy"
+              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white"
             >
               Paste transcript
             </button>
@@ -212,7 +212,7 @@ export function AnalyzeFlow({ profileReady, resumeId }: { profileReady: boolean;
             <button
               type="submit"
               disabled={busy || !pasted.trim()}
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50 dark:text-navy"
+              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
             >
               {busy ? "Starting…" : "Analyze this transcript"}
             </button>

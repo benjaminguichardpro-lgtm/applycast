@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { foundingOfferAvailable, nextResetLabel, ordinal, PRO_PRICE_LABEL } from "@/lib/billing";
-import { FREE_MONTHLY_ANALYSES } from "@/lib/quota";
+import { FOUNDING_PRICE_LABEL, foundingOfferAvailable, nextResetLabel, ordinal, PRO_PRICE_LABEL, proEndsOn } from "@/lib/billing";
+import { FREE_MONTHLY_ANALYSES, PRO_MONTHLY_ANALYSES } from "@/lib/quota";
 import { getMonthStats } from "@/lib/stats";
 import { createClient } from "@/lib/supabase/server";
 import { openPortal, startCheckout } from "./actions";
@@ -13,15 +13,18 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
   if (!user) redirect("/login");
   const supabase = await createClient();
   const [stats, founding] = await Promise.all([getMonthStats(supabase, user.id), foundingOfferAvailable()]);
+  const endsOn = stats.isPro ? await proEndsOn(user.id) : null;
 
-  const blocked = !stats.isPro && stats.left === 0;
+  const blocked = stats.left === 0;
   const title = stats.isPro
-    ? stats.isFounding
-      ? "You’re on Pro · Founding Member"
-      : "You’re on Pro"
+    ? blocked
+      ? `You’ve used your ${PRO_MONTHLY_ANALYSES} analyses this month`
+      : stats.isFounding
+        ? "You’re on Pro · Founding Member"
+        : "You’re on Pro"
     : blocked
       ? `Your ${ordinal(stats.analyses + 1)} analysis needs Pro`
-      : "Go unlimited with Pro";
+      : `Get ${PRO_MONTHLY_ANALYSES} analyses a month with Pro`;
 
   return (
     <section>
@@ -29,7 +32,7 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
         <div>
           <p className="text-xs text-muted">
             {stats.isPro
-              ? "Unlimited analyses"
+              ? `${stats.analyses} of ${PRO_MONTHLY_ANALYSES} analyses used this billing month`
               : `${stats.analyses} of ${FREE_MONTHLY_ANALYSES} free analyses used this month · resets ${nextResetLabel()}`}
           </p>
           <h1 className="mt-2 text-4xl font-medium tracking-tight">{title}</h1>
@@ -41,7 +44,7 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
 
       {welcome && stats.isPro && (
         <p role="status" className="mt-4 rounded-2xl border-2 border-primary bg-chip p-4 text-sm font-semibold">
-          ✓ Welcome to Pro. Your analyses are unlimited.
+          ✓ Welcome to Pro. You get {PRO_MONTHLY_ANALYSES} analyses a month.
         </p>
       )}
       {welcome && !stats.isPro && (
@@ -79,7 +82,7 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
           <h2 className="mt-6 border-t border-line pt-6 text-xl font-medium">What Pro adds</h2>
           <ul className="mt-3 space-y-2 text-sm">
             {[
-              `Unlimited video analyses (free: ${FREE_MONTHLY_ANALYSES} a month)`,
+              `${PRO_MONTHLY_ANALYSES} video analyses a month (free: ${FREE_MONTHLY_ANALYSES})`,
               "A verdict, adaptations and an action plan on every video",
               "Plans sized to your weekly limit",
             ].map((t) => (
@@ -96,9 +99,20 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
         <aside className="self-start rounded-shell bg-navy p-6 text-on-navy">
           <h2 className="text-lg font-medium">Applycast Pro</h2>
           <p className="mt-3 text-6xl font-light leading-none">
-            {PRO_PRICE_LABEL}
+            {stats.isFounding ? FOUNDING_PRICE_LABEL : PRO_PRICE_LABEL}
             <span className="ml-2 text-base">/ month</span>
+            {stats.isFounding && (
+              <s className="ml-2 text-base opacity-70">
+                <span className="sr-only">Regular price </span>
+                {PRO_PRICE_LABEL}
+              </s>
+            )}
           </p>
+          {endsOn && (
+            <p role="status" className="mt-4 rounded-2xl bg-white/15 p-3 text-sm font-semibold">
+              Subscription cancelled. You keep Pro until {endsOn}, and you won’t be charged again.
+            </p>
+          )}
           <ul className="mt-4 space-y-1.5 text-sm">
             <li>✓ Cancel anytime</li>
             <li>✓ If you don’t subscribe, your history stays readable</li>
@@ -109,7 +123,7 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
           {stats.isPro ? (
             <form action={openPortal} className="mt-8">
               <button type="submit" className="w-full rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy">
-                Manage subscription
+                {endsOn ? "Resume or manage subscription" : "Manage subscription"}
               </button>
             </form>
           ) : (

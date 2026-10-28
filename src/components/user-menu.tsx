@@ -9,6 +9,7 @@ import { openPortal } from "@/app/(app)/upgrade/actions";
 export function UserMenu({ email, isPro, isFounding }: { email: string; isPro: boolean; isFounding: boolean }) {
   const initials = email.slice(0, 2).toUpperCase();
   const dialog = useRef<HTMLDialogElement>(null);
+  const menu = useRef<HTMLDetailsElement>(null);
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState(false);
   const [pending, start] = useTransition();
@@ -19,6 +20,23 @@ export function UserMenu({ email, isPro, isFounding }: { email: string; isPro: b
     if (confirming && !d.open) d.showModal();
     if (!confirming && d.open) d.close();
   }, [confirming]);
+
+  // <details> only toggles on its own summary: close it on any outside click or Escape.
+  useEffect(() => {
+    const close = () => menu.current?.removeAttribute("open");
+    const onPointerDown = (e: PointerEvent) => {
+      if (menu.current && !menu.current.contains(e.target as Node)) close();
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
 
   function onDelete() {
     setError(false);
@@ -32,7 +50,7 @@ export function UserMenu({ email, isPro, isFounding }: { email: string; isPro: b
 
   return (
     <>
-      <details className="relative">
+      <details ref={menu} className="relative">
         <summary
           aria-label={`Account menu for ${email}`}
           className="grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full bg-navy text-xs font-semibold text-on-navy [&::-webkit-details-marker]:hidden"
@@ -45,7 +63,7 @@ export function UserMenu({ email, isPro, isFounding }: { email: string; isPro: b
             <p className="px-2 pb-2 pt-1 text-xs font-semibold text-primary">{isFounding ? "★ Pro · Founding Member" : "Pro"}</p>
           )}
           {!isPro && (
-            <Link href="/upgrade" className={`${item} block`}>
+            <Link href="/upgrade" onClick={() => menu.current?.removeAttribute("open")} className={`${item} block`}>
               Upgrade to Pro
             </Link>
           )}
@@ -56,12 +74,22 @@ export function UserMenu({ email, isPro, isFounding }: { email: string; isPro: b
               </button>
             </form>
           )}
+          <Link href="/contact" onClick={() => menu.current?.removeAttribute("open")} className={`${item} block`}>
+            Contact
+          </Link>
           <form action={signOut}>
             <button type="submit" className={item}>
               Sign out
             </button>
           </form>
-          <button type="button" onClick={() => setConfirming(true)} className={`${item} text-warn`}>
+          <button
+            type="button"
+            onClick={() => {
+              menu.current?.removeAttribute("open");
+              setConfirming(true);
+            }}
+            className={`${item} text-warn`}
+          >
             Delete account
           </button>
         </div>
@@ -88,7 +116,7 @@ export function UserMenu({ email, isPro, isFounding }: { email: string; isPro: b
           <button type="button" onClick={() => setConfirming(false)} className="rounded-full border border-line px-4 py-2 text-sm font-medium">
             Cancel
           </button>
-          <button type="button" onClick={onDelete} disabled={pending} className="rounded-full bg-warn px-4 py-2 text-sm font-semibold text-white disabled:opacity-60 dark:text-navy">
+          <button type="button" onClick={onDelete} disabled={pending} className="rounded-full bg-warn px-4 py-2 text-sm font-semibold text-white dark:text-black disabled:opacity-60">
             {pending ? "Deleting…" : "Delete everything"}
           </button>
         </div>

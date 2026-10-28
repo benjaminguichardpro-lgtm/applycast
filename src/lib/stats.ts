@@ -6,7 +6,8 @@ export type ActionStatus = "open" | "done" | "postponed" | "dropped";
 export type MonthStats = {
   month: string;
   analyses: number;
-  left: number | null; // free analyses left; null on Pro
+  left: number; // analyses left this month (free: 3, Pro: 50)
+  limit: number;
   isPro: boolean;
   isFounding: boolean;
   plansValidated: number;
@@ -73,6 +74,7 @@ export async function getMonthStats(supabase: SupabaseClient, userId: string): P
     month: new Date().toLocaleString("en-US", { month: "long", timeZone: "UTC" }),
     analyses: quota.used,
     left: quota.left,
+    limit: quota.limit,
     isPro: quota.isPro,
     isFounding: quota.isFounding,
     plansValidated: planIds.length + orphans.length,

@@ -144,7 +144,7 @@ export function CheckinForm({
             <button type="button" onClick={onSnooze} disabled={busy} className="text-sm text-muted underline">
               Ask me tomorrow
             </button>
-            <button type="submit" disabled={!ready || busy} className="rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white disabled:opacity-50 dark:text-navy">
+            <button type="submit" disabled={!ready || busy} className="rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white disabled:opacity-50">
               {busy ? "Saving…" : "Save check-in"}
             </button>
           </div>

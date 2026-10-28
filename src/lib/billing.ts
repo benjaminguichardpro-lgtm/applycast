@@ -1,6 +1,10 @@
 import Stripe from "stripe";
+import { createAdminClient } from "@/lib/supabase/admin";
 
-export const PRO_PRICE_LABEL = "$15";
+export const PRO_PRICE = 19;
+export const FOUNDING_DISCOUNT_PERCENT = 50; // must match the Stripe coupon
+export const PRO_PRICE_LABEL = `$${PRO_PRICE}`;
+export const FOUNDING_PRICE_LABEL = `$${(PRO_PRICE * (1 - FOUNDING_DISCOUNT_PERCENT / 100)).toFixed(2).replace(/\.00$/, "")}`;
 
 let client: Stripe | null = null;
 export function getStripe() {
@@ -39,5 +43,21 @@ export async function foundingOfferAvailable(): Promise<boolean> {
     return c.valid && (c.max_redemptions == null || c.times_redeemed < c.max_redemptions);
   } catch {
     return false;
+  }
+}
+
+// "Dec 3": set once the subscription was cancelled in the portal but is still paid until then; null otherwise.
+export async function proEndsOn(userId: string): Promise<string | null> {
+  if (!process.env.STRIPE_SECRET_KEY) return null;
+  try {
+    const { data } = await createAdminClient().from("users").select("stripe_subscription_id").eq("id", userId).single();
+    const id = data?.stripe_subscription_id as string | null | undefined;
+    if (!id) return null;
+    const sub = await getStripe().subscriptions.retrieve(id);
+    const end = sub.cancel_at ?? (sub.cancel_at_period_end ? sub.items.data[0]?.current_period_end : null);
+    if (!end) return null;
+    return new Date(end * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  } catch {
+    return null;
   }
 }

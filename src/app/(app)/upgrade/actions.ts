@@ -31,6 +31,7 @@ export async function startCheckout() {
   const customer = await customerIdFor(user.id, user.email);
   const base = {
     mode: "subscription" as const,
+    locale: "en" as const,
     customer,
     line_items: [{ price, quantity: 1 }],
     client_reference_id: user.id,
@@ -75,6 +76,7 @@ export async function openPortal() {
   if (!data?.stripe_customer_id) redirect("/upgrade");
   const session = await getStripe().billingPortal.sessions.create({
     customer: data.stripe_customer_id as string,
+    locale: "en" as const,
     return_url: `${siteUrl()}/upgrade`,
   });
   redirect(session.url);

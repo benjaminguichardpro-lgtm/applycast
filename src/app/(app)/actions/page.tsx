@@ -100,7 +100,7 @@ export default async function ActionsPage() {
           <div className="rounded-shell border border-dashed border-muted/60 bg-card p-10 text-center">
             <h2 className="text-xl font-medium">No actions yet</h2>
             <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Analyze a video, pick adaptations and validate a plan: its steps land here.</p>
-            <Link href="/analyze" className="mt-5 inline-block rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white dark:text-navy">
+            <Link href="/analyze" className="mt-5 inline-block rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white">
               Analyze a video
             </Link>
           </div>

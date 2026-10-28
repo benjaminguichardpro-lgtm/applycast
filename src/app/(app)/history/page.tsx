@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { FREE_MONTHLY_ANALYSES } from "@/lib/quota";
 import { getMonthStats } from "@/lib/stats";
 import { createClient } from "@/lib/supabase/server";
 import { HistoryList, type HistoryRow } from "./history-list";
@@ -48,7 +47,7 @@ export default async function HistoryPage() {
     <section>
       <p className="text-xs text-muted">
         {stats.month} · {stats.analyses} analys{stats.analyses === 1 ? "is" : "es"}
-        {stats.isPro ? "" : ` · ${stats.left} of ${FREE_MONTHLY_ANALYSES} free analyses left`}
+        {` · ${stats.left} of ${stats.limit} ${stats.isPro ? "" : "free "}analyses left`}
       </p>
       <h1 className="mt-2 text-4xl font-medium tracking-tight">History</h1>
 
@@ -60,7 +59,7 @@ export default async function HistoryPage() {
               <p className="mx-auto mt-2 max-w-xs text-sm text-muted">
                 Paste a YouTube link and you’ll get a verdict in under a minute. Everything you analyze lands here.
               </p>
-              <Link href="/analyze" className="mt-5 inline-block rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white dark:text-navy">
+              <Link href="/analyze" className="mt-5 inline-block rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white">
                 Analyze a video
               </Link>
             </div>

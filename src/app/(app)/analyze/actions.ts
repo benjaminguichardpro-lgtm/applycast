@@ -26,7 +26,7 @@ export async function startAnalysis(url: string): Promise<StartResult> {
 
   // Free plan: once the monthly analyses are used, a new analysis needs Pro. Plans, actions and check-ins are never gated.
   const quota = await getAnalysesLeft(supabase, user.id);
-  if (!quota.isPro && quota.left === 0) return { ok: false, error: "quota_exceeded" };
+  if (quota.left === 0) return { ok: false, error: "quota_exceeded" };
 
   const { data, error } = await supabase
     .from("analyses")
@@ -66,7 +66,7 @@ export async function submitPastedTranscript(
   const profile = await getProfile(supabase, user.id);
   if (!isProfileComplete(profile)) return { ok: false, error: "profile_incomplete" };
   const quota = await getAnalysesLeft(supabase, user.id);
-  if (!quota.isPro && quota.left === 0) return { ok: false, error: "quota_exceeded" };
+  if (quota.left === 0) return { ok: false, error: "quota_exceeded" };
 
   // created_at restarts so the stale-run check below measures this attempt, not the failed one.
   await supabase

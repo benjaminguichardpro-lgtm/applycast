@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getProfile, isProfileComplete } from "@/lib/profile-db";
-import { FREE_MONTHLY_ANALYSES } from "@/lib/quota";
 import { getMonthStats } from "@/lib/stats";
 import { getCurrentUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -23,7 +22,7 @@ export default async function AnalyzePage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs text-muted">
-            {month} · {stats.isPro ? "Unlimited analyses" : `${stats.left} of ${FREE_MONTHLY_ANALYSES} free analyses left`}
+            {month} · {`${stats.left} of ${stats.limit} ${stats.isPro ? "" : "free "}analyses left`}
           </p>
           <h1 className="mt-2 text-4xl font-medium tracking-tight">Paste a video, leave with a plan</h1>
           {!stats.isPro && stats.left === 1 && (
@@ -50,7 +49,7 @@ export default async function AnalyzePage() {
           ))}
         </dl>
       </div>
-      <div className="mt-6 max-w-3xl">
+      <div className="mx-auto mt-12 max-w-4xl sm:mt-16">
         <AnalyzeFlow profileReady={isProfileComplete(profile)} />
       </div>
     </section>

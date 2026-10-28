@@ -67,7 +67,7 @@ export function GenerateAdaptations({ analysisId }: { analysisId: string }) {
             </p>
             <div className="mt-3 flex gap-2">
               {error === "failed" && (
-                <button type="button" onClick={run} className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white dark:text-navy">
+                <button type="button" onClick={run} className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white">
                   Try again
                 </button>
               )}

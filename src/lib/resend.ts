@@ -1,6 +1,6 @@
-export type Email = { to: string; subject: string; html: string; text: string };
+export type Email = { to: string; subject: string; html: string; text: string; replyTo?: string };
 
-export async function sendEmail({ to, subject, html, text }: Email) {
+export async function sendEmail({ to, subject, html, text, replyTo }: Email) {
   const key = process.env.RESEND_API_KEY;
   if (!key) throw new Error("RESEND_API_KEY is not set");
   const res = await fetch("https://api.resend.com/emails", {
@@ -12,6 +12,7 @@ export async function sendEmail({ to, subject, html, text }: Email) {
       subject,
       html,
       text,
+      ...(replyTo ? { reply_to: replyTo } : {}),
     }),
     signal: AbortSignal.timeout(20_000),
   });
@@ -33,4 +34,11 @@ export function checkinEmail(opts: { title: string | null; url: string; openCoun
 <p><a href="${opts.url}" style="display:inline-block;padding:12px 20px;background:#1d3666;color:#fff;border-radius:999px;text-decoration:none">What happened?</a></p>
 <p style="color:#5a6478;font-size:13px">One minute: the outcome, your metric before and after, and what to do with open steps.</p>`;
   return { subject, html, text };
+}
+
+export function contactEmail(opts: { from: string; topic: string; message: string }): Omit<Email, "to"> {
+  const subject = `[Applycast] ${opts.topic} from ${opts.from}`;
+  const text = `${opts.message}\n\n— ${opts.from} (reply to this email to answer)`;
+  const html = `<p style="white-space:pre-wrap">${escapeHtml(opts.message)}</p><p style="color:#5a6478;font-size:13px">${escapeHtml(opts.from)} · ${escapeHtml(opts.topic)} · reply to this email to answer</p>`;
+  return { subject, html, text, replyTo: opts.from };
 }

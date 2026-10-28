@@ -2,36 +2,36 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Tokens sampled from design-reference direction A (Outfit, white cards on pale shell, radius 28). */
+/* Palette: a sober red as the brand colour on neutral greys. */
 :root {
-  --page: #d5dce6;
-  --shell: #edf0f7;
+  --page: #e5e5e5;
+  --shell: #f6f6f6;
   --card: #ffffff;
-  --field: #f1f4f9;
-  --chip: #e1e8f7;
-  --ink: #141b2d;
-  --muted: #5a6478;
-  --line: #d3d9e6;
-  --navy: #1d3666;
-  --navy-soft: #2c4677;
+  --field: #f0f0f0;
+  --chip: #f6e3e1;
+  --ink: #0f0f0f;
+  --muted: #606060;
+  --line: #e0e0e0;
+  --navy: #b91c1c;
+  --navy-soft: #991b1b;
   --on-navy: #ffffff;
-  --primary: #2f5bd6;
-  --warn: #b42318;
+  --primary: #b91c1c;
+  --warn: #7c2d12;
 }
 
 [data-theme="dark"] {
-  --page: #0b0f1a;
-  --shell: #121828;
-  --card: #1a2237;
-  --field: #232c45;
-  --chip: #2a3555;
-  --ink: #eef1f8;
-  --muted: #a3adc4;
-  --line: #2f3a58;
-  --navy: #0e1a38;
-  --navy-soft: #1c2c55;
+  --page: #0f0f0f;
+  --shell: #181818;
+  --card: #212121;
+  --field: #2a2a2a;
+  --chip: #3a2222;
+  --ink: #f1f1f1;
+  --muted: #aaaaaa;
+  --line: #3f3f3f;
+  --navy: #9f1f1f;
+  --navy-soft: #7f1d1d;
   --on-navy: #ffffff;
-  --primary: #7b9bff;
+  --primary: #dc4a4a;
   --warn: #ff8a80;
 }
 

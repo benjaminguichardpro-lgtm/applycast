@@ -33,7 +33,7 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
     return (
       <section>
         <h1 className="text-4xl font-medium tracking-tight">Analyzing your video</h1>
-        <div className="mt-6 max-w-3xl">
+        <div className="mx-auto mt-12 max-w-4xl sm:mt-16">
           <AnalyzeFlow profileReady resumeId={id} />
         </div>
       </section>
@@ -192,18 +192,18 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
           {low ? (
             <>
             <div role="status" className="mt-4 flex items-start gap-3 rounded-2xl border-2 border-primary bg-chip p-4 text-sm text-ink">
-              <span aria-hidden="true" className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-white dark:text-navy">
+              <span aria-hidden="true" className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-white">
                 ✓
               </span>
               <div>
                 <p className="font-semibold">This analysis was not counted.</p>
                 <p className="mt-0.5 text-muted">
-                  A Low match is free.{quota.isPro ? "" : ` You still have ${quota.left} free ${quota.left === 1 ? "analysis" : "analyses"} this month.`}
+                  A Low match is free.{` You still have ${quota.left} ${quota.isPro ? "" : "free "}${quota.left === 1 ? "analysis" : "analyses"} this month.`}
                 </p>
               </div>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link href="/analyze" className="rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white dark:text-navy">
+              <Link href="/analyze" className="rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white">
                 Skip
               </Link>
               <Link href="/analyze" className="rounded-full border border-line px-6 py-3 text-sm font-medium">

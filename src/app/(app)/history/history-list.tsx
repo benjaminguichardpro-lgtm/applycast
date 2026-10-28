@@ -103,7 +103,7 @@ export function HistoryList({ rows }: { rows: HistoryRow[] }) {
           <button type="button" onClick={() => setTarget(null)} className="rounded-full border border-line px-4 py-2 text-sm font-medium">
             Cancel
           </button>
-          <button type="button" onClick={confirmDelete} disabled={busy} className="rounded-full bg-warn px-4 py-2 text-sm font-semibold text-white disabled:opacity-60 dark:text-navy">
+          <button type="button" onClick={confirmDelete} disabled={busy} className="rounded-full bg-warn px-4 py-2 text-sm font-semibold text-white dark:text-black disabled:opacity-60">
             {busy ? "Deleting…" : "Delete"}
           </button>
         </div>

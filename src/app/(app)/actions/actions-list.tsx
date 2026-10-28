@@ -82,7 +82,7 @@ export function ActionsList({ rows: initial, groups }: { rows: ActionRow[]; grou
 
   const seg = (on: boolean, tone: "done" | "postponed" | "dropped") =>
     `px-4 py-2 text-xs font-semibold rounded-full ${
-      on ? (tone === "done" ? "bg-navy text-on-navy" : tone === "postponed" ? "bg-chip text-primary" : "bg-muted text-white dark:text-navy") : "text-ink"
+      on ? (tone === "done" ? "bg-navy text-on-navy" : tone === "postponed" ? "bg-chip text-primary" : "bg-muted text-white") : "text-ink"
     }`;
 
   return (
