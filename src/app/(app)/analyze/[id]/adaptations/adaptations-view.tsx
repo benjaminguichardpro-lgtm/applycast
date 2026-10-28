@@ -84,6 +84,7 @@ export function GenerateAdaptations({ analysisId }: { analysisId: string }) {
 
 export function AdaptationsView({
   analysisId,
+  planReady,
   items: initial,
   leftOut,
   goalMetric,
@@ -91,6 +92,7 @@ export function AdaptationsView({
   context,
 }: {
   analysisId: string;
+  planReady: boolean;
   items: Item[];
   leftOut: LeftOut[];
   goalMetric: string | null;
@@ -118,7 +120,8 @@ export function AdaptationsView({
     setBusy(true);
     setError(null);
     const res = await buildPlan(analysisId, target);
-    if (res.ok) router.push(`/analyze/${analysisId}/plan`);
+    // A validated plan can't be rebuilt: take the user to it instead of leaving them on an error.
+    if (res.ok || res.error === "already_validated") router.push(`/analyze/${analysisId}/plan`);
     else {
       setBusy(false);
       setError(res.error);
@@ -132,8 +135,16 @@ export function AdaptationsView({
     <section>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <AnalysisStepper analysisId={analysisId} current="adaptations" />
+          <AnalysisStepper analysisId={analysisId} current="adaptations" planReady={planReady} />
           <h1 className="mt-2 text-4xl font-medium tracking-tight">From their playbook to yours</h1>
+          {planReady && (
+            <p role="status" className="mt-4 rounded-2xl border-2 border-primary bg-chip p-4 text-sm">
+              You already validated a plan for this video.{" "}
+              <a href={`/analyze/${analysisId}/plan`} className="font-semibold text-primary underline">
+                Open your action plan →
+              </a>
+            </p>
+          )}
         </div>
         <Link href={`/analyze/${analysisId}`} className="rounded-full border border-line px-4 py-2 text-sm">
           ← Result
