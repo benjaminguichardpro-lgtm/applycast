@@ -15,6 +15,8 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
   const [stats, founding] = await Promise.all([getMonthStats(supabase, user.id), foundingOfferAvailable()]);
   const endsOn = stats.isPro ? await proEndsOn(user.id) : null;
 
+  // The discounted price shows for current Founding Members and for anyone who would get it at checkout.
+  const showFounding = stats.isFounding || (!stats.isPro && founding);
   const blocked = stats.left === 0;
   const title = stats.isPro
     ? blocked
@@ -99,9 +101,9 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
         <aside className="self-start rounded-shell bg-navy p-6 text-on-navy">
           <h2 className="text-lg font-medium">Applycast Pro</h2>
           <p className="mt-3 text-6xl font-light leading-none">
-            {stats.isFounding ? FOUNDING_PRICE_LABEL : PRO_PRICE_LABEL}
+            {showFounding ? FOUNDING_PRICE_LABEL : PRO_PRICE_LABEL}
             <span className="ml-2 text-base">/ month</span>
-            {stats.isFounding && (
+            {showFounding && (
               <s className="ml-2 text-base opacity-70">
                 <span className="sr-only">Regular price </span>
                 {PRO_PRICE_LABEL}
