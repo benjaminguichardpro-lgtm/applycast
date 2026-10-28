@@ -15,7 +15,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-3 z-30 mx-auto max-w-[1136px] px-4 pt-3">
       <div className="site-header-inner flex items-center justify-between gap-3 rounded-3xl px-4 py-2 sm:px-5">
-        <Link href="/" aria-label="Applycast">
+        <Link href="/" aria-label="Applycast" className="site-logo">
           <Logo height={38} />
         </Link>
         <nav aria-label="Main" className="hidden gap-8 text-sm text-muted md:flex">

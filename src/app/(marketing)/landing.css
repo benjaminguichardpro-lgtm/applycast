@@ -120,6 +120,15 @@ html.lenis body {
   border: 1px solid transparent;
   transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, backdrop-filter 0.3s;
 }
+/* The logo shrinks a little once the page has scrolled. */
+.site-logo img {
+  width: auto;
+  height: 38px;
+  transition: height 0.3s ease;
+}
+html[data-scrolled] .site-logo img {
+  height: 28px;
+}
 html[data-scrolled] .site-header-inner {
   background: color-mix(in srgb, var(--card) 86%, transparent);
   border-color: color-mix(in srgb, var(--line) 70%, transparent);
