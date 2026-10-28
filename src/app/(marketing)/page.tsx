@@ -18,8 +18,7 @@ export default function Landing() {
   return (
     <>
       <section className="mx-auto max-w-[1136px] px-4 pt-10 text-center sm:pt-16">
-        <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted">For B2B SaaS and AI founders</p>
-        <h1 className="mt-8 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
+        <h1 className="text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
           <span className="block text-muted line-through decoration-[0.07em]">“I watched it.”</span>
           <span className="block text-primary">“I did it.”</span>
         </h1>
