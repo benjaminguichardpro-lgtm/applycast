@@ -2,10 +2,30 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // /api/cron and the Stripe webhook authenticate themselves (bearer secret, signature); neither has a user session.
-const PUBLIC_PATHS = ["/login", "/auth", "/api/cron", "/api/stripe/webhook"];
+const PUBLIC_PATHS = ["/login", "/auth", "/api/cron", "/api/stripe/webhook", "/privacy", "/terms"];
+
+// Pages served on the marketing host (getapplycast.com). Everything else lives on the app host (app.getapplycast.com).
+// With APP_HOST / MARKETING_HOST unset (the default), one host serves both and "/" is the landing.
+const MARKETING_PATHS = ["/", "/privacy", "/terms"];
 
 // Refreshes the Supabase session cookie and sends anonymous visitors to /login.
 export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const host = request.headers.get("host");
+  const appHost = process.env.APP_HOST;
+  const marketingHost = process.env.MARKETING_HOST;
+  const splitHosts = Boolean(appHost && marketingHost);
+
+  if (splitHosts && host === marketingHost) {
+    if (MARKETING_PATHS.includes(pathname) || pathname.startsWith("/api/")) return NextResponse.next();
+    return NextResponse.redirect(new URL(`${pathname}${request.nextUrl.search}`, `${request.nextUrl.protocol}//${appHost}`));
+  }
+  if (splitHosts && pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/context";
+    return NextResponse.redirect(url);
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -26,8 +46,7 @@ export async function proxy(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims?.sub ? data.claims : null;
 
-  const { pathname } = request.nextUrl;
-  const isPublic = PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  const isPublic = pathname === "/" || PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 
   if (!user && !isPublic) {
     const url = request.nextUrl.clone();
