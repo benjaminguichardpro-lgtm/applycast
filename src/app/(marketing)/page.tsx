@@ -28,7 +28,7 @@ export default function Landing() {
           <span {...reveal(0, "drop")} className="block text-muted line-through decoration-[0.07em]">“I watched it.”</span>
           <span {...reveal(2, "drop")} className="block text-primary">“I did it.”</span>
         </h1>
-        <p {...reveal(4, "drop")} className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-muted">
+        <p {...reveal(4, "drop")} className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted">
           Paste a business video. Applycast tells you what applies to your startup and turns it into a plan of 5 steps or fewer that you actually finish.
         </p>
         <form {...reveal(6, "drop")} action={appLink("/login")} className="mx-auto mt-8 max-w-[640px] text-left">
