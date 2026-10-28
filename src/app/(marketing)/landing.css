@@ -1,6 +1,12 @@
 /* Landing-only motion. Everything is progressive: without JS the content is simply visible, and
    prefers-reduced-motion switches every animation off. Colours come from the app tokens (--primary…). */
 
+/* Light mode only: the landing's page colour is the reference's soft blue-tinted white instead of the app's grey.
+   The hero backdrop falls back to --page too, so it follows automatically. Dark mode keeps the app token. */
+html:not([data-theme="dark"]) [data-landing] {
+  --page: #f8fafc;
+}
+
 /* Smooth scrolling is handled by Lenis (see SmoothScroll); these are the rules it needs. */
 html.lenis,
 html.lenis body {
