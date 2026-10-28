@@ -20,6 +20,8 @@ export default function Landing() {
     <>
       <section className="relative isolate mx-auto max-w-[1136px] px-4 pt-10 text-center sm:pt-16">
         <div className="hero-glow" aria-hidden="true" />
+        <div className="hero-beam hero-beam-a" aria-hidden="true" />
+        <div className="hero-beam hero-beam-b" aria-hidden="true" />
         <h1 className="text-[clamp(2.75rem,12vw,6rem)] font-semibold leading-[1.05] tracking-tight">
           <span {...reveal(0, "drop")} className="block text-muted line-through decoration-[0.07em]">“I watched it.”</span>
           <span {...reveal(2, "drop")} className="block text-primary">“I did it.”</span>
