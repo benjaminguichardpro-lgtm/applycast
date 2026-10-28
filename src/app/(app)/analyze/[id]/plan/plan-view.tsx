@@ -180,7 +180,8 @@ export function PlanView({
           </div>
         </div>
 
-        <aside className="rounded-shell bg-navy p-6 text-on-navy">
+        {/* Once validated, the panel is only as tall as its content (self-start); the draft panel keeps matching the steps column. */}
+        <aside className={`rounded-shell bg-navy p-6 text-on-navy ${validated ? "self-start" : ""}`}>
           {validated ? (
             <>
               <h2 className="text-lg font-medium">Plan validated</h2>
