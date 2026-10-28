@@ -1,4 +1,5 @@
 import { ScrollEffects } from "@/components/landing/scroll-effects";
+import { SmoothScroll } from "@/components/landing/smooth-scroll";
 import { SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
 import "./landing.css";
@@ -12,6 +13,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
     <div data-landing className="min-h-screen overflow-x-clip bg-page">
       <script dangerouslySetInnerHTML={{ __html: revealScript }} />
       <ScrollEffects />
+      <SmoothScroll />
       <SiteHeader />
       <main id="main">{children}</main>
       <SiteFooter />
