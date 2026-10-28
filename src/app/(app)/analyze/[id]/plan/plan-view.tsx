@@ -173,15 +173,19 @@ export function PlanView({
                 : `✓ Fits your limit: ${round1(limit)} h per week`}
             </span>
           </div>
-          <div className="mt-3 max-w-sm text-ink">
-            <div className="rounded-2xl bg-navy p-4 text-on-navy">
-              <EffortGauge hours={total} limit={limit} perWeek={perWeek} />
+          {!validated && (
+            <div className="mt-3 max-w-sm text-ink">
+              <div className="rounded-2xl bg-navy p-4 text-on-navy">
+                <EffortGauge hours={total} limit={limit} perWeek={perWeek} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* Once validated, the panel is only as tall as its content (self-start); the draft panel keeps matching the steps column. */}
-        <aside className={`rounded-shell bg-navy p-6 text-on-navy ${validated ? "self-start" : ""}`}>
+        {/* Once validated, the panels are only as tall as their content and the effort gauge sits right under them;
+            while drafting, the panel is a plain grid item that matches the steps column. */}
+        <div className={validated ? "flex flex-col gap-4 self-start" : "contents"}>
+        <aside className="rounded-shell bg-navy p-6 text-on-navy">
           {validated ? (
             <>
               <h2 className="text-lg font-medium">Plan validated</h2>
@@ -258,6 +262,12 @@ export function PlanView({
             </>
           )}
         </aside>
+        {validated && (
+          <div className="rounded-shell bg-navy p-6 text-on-navy">
+            <EffortGauge hours={total} limit={limit} perWeek={perWeek} />
+          </div>
+        )}
+        </div>
       </div>
     </section>
   );
