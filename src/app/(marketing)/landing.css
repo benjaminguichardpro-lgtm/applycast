@@ -207,6 +207,7 @@ html[data-scrolled] .site-header-inner {
 }
 .roll {
   display: inline-flex;
+  align-items: flex-start; /* letters keep their own height, so the shift below is exactly one line */
   height: 1.25em;
   overflow: hidden;
   line-height: 1.25em;
@@ -225,7 +226,7 @@ html[data-scrolled] .site-header-inner {
   }
   .btn-roll:hover .roll-ch,
   .btn-roll:focus-visible .roll-ch {
-    transform: translateY(-50%);
+    transform: translateY(-1.25em);
   }
 }
 
