@@ -1,9 +1,14 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 // Reveals [data-reveal] elements once as they enter the viewport, and flags a scrolled page for the sticky header.
+// The layout stays mounted when moving between landing pages, so this re-runs on every route change to pick up the
+// new page's elements (otherwise they stay hidden).
 export function ScrollEffects() {
+  const pathname = usePathname();
+
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.fx = "";
@@ -35,7 +40,7 @@ export function ScrollEffects() {
       delete root.dataset.scrolled;
       delete root.dataset.fx;
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }
