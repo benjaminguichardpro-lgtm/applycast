@@ -7,15 +7,17 @@ const STEPS = [
 ] as const;
 
 // Where the user is in analysis → adaptations → plan. Earlier steps link back; later ones are not reachable yet,
-// except the plan once one has been validated (planReady).
+// except the plan once one has been validated (planReady) and adaptations when the verdict allows them (adaptationsReady).
 export function AnalysisStepper({
   analysisId,
   current,
   planReady = false,
+  adaptationsReady = false,
 }: {
   analysisId: string;
   current: (typeof STEPS)[number]["key"];
   planReady?: boolean;
+  adaptationsReady?: boolean;
 }) {
   const at = STEPS.findIndex((s) => s.key === current);
   return (
@@ -33,7 +35,9 @@ export function AnalysisStepper({
               {state === "done" ? "✓" : i + 1}
             </span>
           );
-          const linked = state === "done" || (s.key === "plan" && planReady && state === "todo");
+          const linked =
+            state === "done" ||
+            (state === "todo" && ((s.key === "plan" && planReady) || (s.key === "adaptations" && adaptationsReady)));
           const cls = `flex items-center gap-2 rounded-full px-3 py-1.5 ${
             state === "current" ? "bg-card font-semibold shadow-sm" : linked ? "hover:bg-card" : "text-muted"
           }`;

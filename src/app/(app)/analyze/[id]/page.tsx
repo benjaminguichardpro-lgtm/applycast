@@ -62,7 +62,7 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
     <section>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <AnalysisStepper analysisId={id} current="result" planReady={planReady} />
+          <AnalysisStepper analysisId={id} current="result" planReady={planReady} adaptationsReady={!low} />
           <h1 className="mt-2 text-4xl font-medium tracking-tight">What this video says, and whether it’s for you</h1>
         </div>
         <Link href="/analyze" className="rounded-full border border-line px-4 py-2 text-sm">
