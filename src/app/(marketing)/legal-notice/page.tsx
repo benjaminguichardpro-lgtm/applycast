@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Fill, LegalPage, LegalSection } from "@/components/landing/legal-page";
-import { LEGAL } from "@/lib/legal";
+import { hasMediator, LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = { title: "Legal notice · Applycast" };
 
@@ -48,12 +48,14 @@ export default function LegalNotice() {
         </p>
       </LegalSection>
 
-      <LegalSection title="Consumer mediation">
-        <p>
-          If you are a consumer, you may use the following consumer mediator free of charge, once you have tried to settle the dispute with us
-          directly: <Fill value={LEGAL.mediator} />.
-        </p>
-      </LegalSection>
+      {hasMediator && (
+        <LegalSection title="Consumer mediation">
+          <p>
+            If you are a consumer, you may use the following consumer mediator free of charge, once you have tried to settle the dispute with us
+            directly: <Fill value={LEGAL.mediator} />.
+          </p>
+        </LegalSection>
+      )}
 
       <LegalSection title="Intellectual property">
         <p>The brand, logo, texts, interfaces and code of {LEGAL.product} are protected. Reproduction without written permission is prohibited.</p>

@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { getStripe } from "@/lib/billing";
+import { hasMediator } from "@/lib/legal";
 import { MARKETING_URL } from "@/lib/site";
 import { getCurrentUser } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -44,7 +45,9 @@ export async function startCheckout() {
       consent_collection: { terms_of_service: "required" as const },
       custom_text: {
         terms_of_service_acceptance: {
-          message: `I accept the [Terms](${MARKETING_URL}/terms) and ask for the service to start immediately. If I am a consumer, I know I can withdraw within 14 days and then pay only for the service already used.`,
+          message: hasMediator
+            ? `I accept the [Terms](${MARKETING_URL}/terms) and ask for the service to start immediately. If I am a consumer, I know I can withdraw within 14 days and then pay only for the service already used.`
+            : `I accept the [Terms](${MARKETING_URL}/terms) and confirm that I use Applycast for professional purposes, not as a consumer.`,
         },
       },
     }),

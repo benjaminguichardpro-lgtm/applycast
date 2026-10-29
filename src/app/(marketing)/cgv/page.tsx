@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Fill, LegalPage, LegalSection } from "@/components/landing/legal-page";
 import { FOUNDING_DISCOUNT_PERCENT, FOUNDING_PRICE_LABEL, PRO_PRICE_LABEL } from "@/lib/billing";
-import { LEGAL } from "@/lib/legal";
+import { hasMediator, LEGAL } from "@/lib/legal";
 import { FREE_MONTHLY_ANALYSES, PRO_MONTHLY_ANALYSES } from "@/lib/quota";
 
 export const metadata: Metadata = { title: "CGV et conditions d’utilisation · Applycast" };
@@ -16,9 +16,13 @@ export default function Cgv() {
           lien d’une vidéo business ; le service analyse sa transcription avec une IA, vous indique quels points s’appliquent à votre activité et à votre objectif, et vous aide à les transformer en un plan de
           quelques étapes, avec des bilans. En créant un compte ou en vous abonnant, vous acceptez ces conditions.
         </p>
-        <p>
-          {LEGAL.product} est conçu pour les professionnels. Les consommateurs peuvent aussi l’utiliser : les règles qui les protègent sont à l’article 6.
-        </p>
+        {hasMediator ? (
+          <p>
+            {LEGAL.product} est conçu pour les professionnels. Les consommateurs peuvent aussi l’utiliser : les règles qui les protègent sont à l’article 6.
+          </p>
+        ) : (
+          <p>{LEGAL.product} est réservé aux professionnels : voir l’article 6.</p>
+        )}
       </LegalSection>
 
       <LegalSection title="2. Compte">
@@ -68,28 +72,37 @@ export default function Cgv() {
             Écrivez à <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>.
           </li>
         </ul>
-        <p>Cet article ne réduit pas les droits que la loi accorde aux consommateurs (article 6).</p>
+        {hasMediator && <p>Cet article ne réduit pas les droits que la loi accorde aux consommateurs (article 6).</p>}
       </LegalSection>
 
-      <LegalSection title="6. Consommateurs">
-        <p>Si vous utilisez {LEGAL.product} en tant que consommateur (hors de votre activité professionnelle), la loi vous donne les droits suivants, que ces conditions ne limitent pas.</p>
-        <ul>
-          <li>
-            <strong>Droit de rétractation :</strong> vous pouvez vous rétracter dans les 14 jours suivant la souscription, sans donner de motif, en nous envoyant une déclaration claire à{" "}
-            <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>. Si vous avez demandé que le service commence immédiatement (cette confirmation vous est demandée lors de la souscription), vous payez ce qui a été fourni
-            jusqu’à votre demande, proportionnellement au prix de la période. Le reste est remboursé sous 14 jours.
-          </li>
-          <li>
-            <strong>Résiliation en ligne :</strong> vous pouvez mettre fin à votre abonnement à tout moment depuis l’application, comme à l’article 5.
-          </li>
-          <li>
-            <strong>Garanties légales :</strong> les règles légales sur la conformité des services numériques restent applicables.
-          </li>
-          <li>
-            <strong>Médiation :</strong> après nous avoir contactés, vous pouvez saisir le médiateur de la consommation : <Fill value={LEGAL.mediator} />.
-          </li>
-        </ul>
-      </LegalSection>
+      {hasMediator ? (
+        <LegalSection title="6. Consommateurs">
+          <p>Si vous utilisez {LEGAL.product} en tant que consommateur (hors de votre activité professionnelle), la loi vous donne les droits suivants, que ces conditions ne limitent pas.</p>
+          <ul>
+            <li>
+              <strong>Droit de rétractation :</strong> vous pouvez vous rétracter dans les 14 jours suivant la souscription, sans donner de motif, en nous envoyant une déclaration claire à{" "}
+              <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>. Si vous avez demandé que le service commence immédiatement (cette confirmation vous est demandée lors de la souscription), vous payez ce qui a été fourni
+              jusqu’à votre demande, proportionnellement au prix de la période. Le reste est remboursé sous 14 jours.
+            </li>
+            <li>
+              <strong>Résiliation en ligne :</strong> vous pouvez mettre fin à votre abonnement à tout moment depuis l’application, comme à l’article 5.
+            </li>
+            <li>
+              <strong>Garanties légales :</strong> les règles légales sur la conformité des services numériques restent applicables.
+            </li>
+            <li>
+              <strong>Médiation :</strong> après nous avoir contactés, vous pouvez saisir le médiateur de la consommation : <Fill value={LEGAL.mediator} />.
+            </li>
+          </ul>
+        </LegalSection>
+      ) : (
+        <LegalSection title="6. Usage professionnel uniquement">
+          <p>
+            {LEGAL.product} est réservé aux professionnels agissant pour les besoins de leur activité. En créant un compte ou en vous abonnant, vous confirmez l’utiliser à des fins professionnelles et non en tant que
+            consommateur. Nous pouvons fermer un compte utilisé autrement. Les règles propres aux consommateurs, comme le droit de rétractation, ne s’appliquent donc pas.
+          </p>
+        </LegalSection>
+      )}
 
       <LegalSection title="7. Utilisation acceptable">
         <p>
@@ -122,7 +135,7 @@ export default function Cgv() {
       <LegalSection title="11. Responsabilité">
         <p>
           Pour les clients professionnels, et dans la mesure permise par la loi, notre responsabilité totale est limitée aux sommes que vous avez payées au cours des 12 mois précédant l’événement, et nous ne répondons pas
-          des dommages indirects comme la perte de profit ou de clientèle. Rien dans ces conditions n’exclut une responsabilité que la loi ne permet pas d’exclure, et les consommateurs conservent tous leurs droits légaux.
+          des dommages indirects comme la perte de profit ou de clientèle. Rien dans ces conditions n’exclut une responsabilité que la loi ne permet pas d’exclure, {hasMediator ? " et les consommateurs conservent tous leurs droits légaux" : ""}.
         </p>
       </LegalSection>
 
@@ -142,8 +155,7 @@ export default function Cgv() {
 
       <LegalSection title="14. Droit applicable et litiges">
         <p>
-          Ces conditions sont régies par le droit français. Les clients professionnels soumettent leurs litiges aux tribunaux français compétents. Les consommateurs peuvent saisir les tribunaux de leur lieu de résidence et
-          conservent les protections impératives de leur pays. Contact : <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>.
+          Ces conditions sont régies par le droit français. Les clients professionnels soumettent leurs litiges aux tribunaux français compétents.{hasMediator ? " Les consommateurs peuvent saisir les tribunaux de leur lieu de résidence et conservent les protections impératives de leur pays." : ""} Contact : <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>.
         </p>
       </LegalSection>
     </LegalPage>

@@ -3,13 +3,15 @@
 export const LEGAL = {
   product: "Applycast",
   site: "getapplycast.com",
-  publisherName: "[À COMPLÉTER : prénom et nom]",
+  publisherName: "Benjamin Guichard",
   legalForm: "Entreprise individuelle",
-  siren: "[À COMPLÉTER : numéro SIREN]",
-  address: "[À COMPLÉTER : adresse professionnelle]",
-  vat: "[À COMPLÉTER : numéro de TVA, ou « TVA non applicable, art. 293 B du CGI »]",
+  siren: "977798156",
+  address: "72 rue du faubourg poissonnière, 75010, Paris",
+  vat: "TVA non applicable, art. 293 B du CGI",
   email: "benjaminguichardpro@gmail.com",
-  mediator: "[À COMPLÉTER : nom, adresse postale et site du médiateur de la consommation]",
+  // Consumer mediator (name, postal address, website). Leave EMPTY if you have none: the service is then offered to
+  // professionals only, and the consumer sections disappear from the legal pages.
+  mediator: "",
   // Hosting provider of the site (public details as published by third parties; check vercel.com before launch).
   host: { name: "Vercel Inc.", address: "340 S Lemon Ave #4133, Walnut, CA 91789, USA", phone: "+1 559 288 7060" },
   updatedEn: "October 29, 2026",
@@ -17,3 +19,6 @@ export const LEGAL = {
 } as const;
 
 export const isToFill = (value: string) => value.startsWith("[À COMPLÉTER");
+
+// Selling to consumers requires a consumer mediator; without one, the terms say the service is for professionals only.
+export const hasMediator = LEGAL.mediator.trim() !== "";

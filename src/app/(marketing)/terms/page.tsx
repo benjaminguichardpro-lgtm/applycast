@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Fill, LegalPage, LegalSection } from "@/components/landing/legal-page";
 import { FOUNDING_DISCOUNT_PERCENT, FOUNDING_PRICE_LABEL, PRO_PRICE_LABEL } from "@/lib/billing";
-import { LEGAL } from "@/lib/legal";
+import { hasMediator, LEGAL } from "@/lib/legal";
 import { FREE_MONTHLY_ANALYSES, PRO_MONTHLY_ANALYSES } from "@/lib/quota";
 
 export const metadata: Metadata = { title: "Terms of use and sale · Applycast" };
@@ -16,9 +16,13 @@ export default function Terms() {
           link of a business video; the service analyzes its transcript with AI, tells you which points apply to your business and goal, and helps you turn them into a plan of a few steps,
           with check-ins. By creating an account or subscribing you accept these terms.
         </p>
-        <p>
-          {LEGAL.product} is designed for professionals. Consumers may also use it: the specific rules that protect them are in section 6.
-        </p>
+        {hasMediator ? (
+          <p>
+            {LEGAL.product} is designed for professionals. Consumers may also use it: the specific rules that protect them are in section 6.
+          </p>
+        ) : (
+          <p>{LEGAL.product} is offered to professionals only: see section 6.</p>
+        )}
       </LegalSection>
 
       <LegalSection title="2. Account">
@@ -68,28 +72,37 @@ export default function Terms() {
             <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>.
           </li>
         </ul>
-        <p>This section does not reduce the rights that the law gives to consumers (section 6).</p>
+        {hasMediator && <p>This section does not reduce the rights that the law gives to consumers (section 6).</p>}
       </LegalSection>
 
-      <LegalSection title="6. Consumers">
-        <p>If you use {LEGAL.product} as a consumer (not for your professional activity), the law gives you the following rights, which these terms do not limit.</p>
-        <ul>
-          <li>
-            <strong>Right of withdrawal:</strong> you can withdraw within 14 days of subscribing, without giving a reason, by sending us a clear statement at{" "}
-            <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>. If you asked for the service to start immediately (you are asked to confirm this when you subscribe), you pay for what was provided until you told us
-            you withdraw, in proportion to the price of the period. The rest is refunded within 14 days.
-          </li>
-          <li>
-            <strong>Cancellation online:</strong> you can end your subscription at any time from the app, as in section 5.
-          </li>
-          <li>
-            <strong>Legal guarantees:</strong> the legal rules on the conformity of digital services remain applicable.
-          </li>
-          <li>
-            <strong>Mediation:</strong> after contacting us, you may refer a dispute to the consumer mediator: <Fill value={LEGAL.mediator} />.
-          </li>
-        </ul>
-      </LegalSection>
+      {hasMediator ? (
+        <LegalSection title="6. Consumers">
+          <p>If you use {LEGAL.product} as a consumer (not for your professional activity), the law gives you the following rights, which these terms do not limit.</p>
+          <ul>
+            <li>
+              <strong>Right of withdrawal:</strong> you can withdraw within 14 days of subscribing, without giving a reason, by sending us a clear statement at{" "}
+              <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>. If you asked for the service to start immediately (you are asked to confirm this when you subscribe), you pay for what was provided until you told us
+              you withdraw, in proportion to the price of the period. The rest is refunded within 14 days.
+            </li>
+            <li>
+              <strong>Cancellation online:</strong> you can end your subscription at any time from the app, as in section 5.
+            </li>
+            <li>
+              <strong>Legal guarantees:</strong> the legal rules on the conformity of digital services remain applicable.
+            </li>
+            <li>
+              <strong>Mediation:</strong> after contacting us, you may refer a dispute to the consumer mediator: <Fill value={LEGAL.mediator} />.
+            </li>
+          </ul>
+        </LegalSection>
+      ) : (
+        <LegalSection title="6. Professional use only">
+          <p>
+            {LEGAL.product} is offered to professionals acting for the needs of their business. By creating an account or subscribing, you confirm that you use it for professional purposes and not as a consumer.
+            We may close an account that is used otherwise. Consumer rules, such as the right of withdrawal, therefore do not apply.
+          </p>
+        </LegalSection>
+      )}
 
       <LegalSection title="7. Acceptable use">
         <p>
@@ -121,7 +134,7 @@ export default function Terms() {
       <LegalSection title="11. Liability">
         <p>
           For professional customers, and to the extent the law allows, our total liability is limited to the amounts you paid in the 12 months before the event, and we are not liable for indirect losses
-          such as lost profit or lost business. Nothing in these terms excludes a liability that the law does not allow to be excluded, and consumers keep all their legal rights.
+          such as lost profit or lost business. Nothing in these terms excludes a liability that the law does not allow to be excluded{hasMediator ? ", and consumers keep all their legal rights" : ""}.
         </p>
       </LegalSection>
 
@@ -140,8 +153,7 @@ export default function Terms() {
 
       <LegalSection title="14. Law and disputes">
         <p>
-          These terms are governed by French law. Professional customers submit disputes to the competent French courts. Consumers may bring a dispute before the courts of their place of residence and keep
-          the mandatory protections of their country. Contact: <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>.
+          These terms are governed by French law. Professional customers submit disputes to the competent French courts.{hasMediator ? " Consumers may bring a dispute before the courts of their place of residence and keep the mandatory protections of their country." : ""} Contact: <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>.
         </p>
       </LegalSection>
     </LegalPage>

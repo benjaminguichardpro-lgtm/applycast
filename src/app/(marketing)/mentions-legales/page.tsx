@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Fill, LegalPage, LegalSection } from "@/components/landing/legal-page";
-import { LEGAL } from "@/lib/legal";
+import { hasMediator, LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = { title: "Mentions légales · Applycast" };
 
@@ -48,12 +48,14 @@ export default function MentionsLegales() {
         </p>
       </LegalSection>
 
-      <LegalSection title="Médiation de la consommation">
-        <p>
-          Si vous êtes un consommateur, vous pouvez recourir gratuitement au médiateur de la consommation suivant, après avoir tenté de résoudre
-          le litige directement avec nous : <Fill value={LEGAL.mediator} />.
-        </p>
-      </LegalSection>
+      {hasMediator && (
+        <LegalSection title="Médiation de la consommation">
+          <p>
+            Si vous êtes un consommateur, vous pouvez recourir gratuitement au médiateur de la consommation suivant, après avoir tenté de résoudre
+            le litige directement avec nous : <Fill value={LEGAL.mediator} />.
+          </p>
+        </LegalSection>
+      )}
 
       <LegalSection title="Propriété intellectuelle">
         <p>
