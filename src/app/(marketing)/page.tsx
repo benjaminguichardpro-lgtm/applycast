@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { BeforeAfter } from "@/components/landing/before-after";
+import { DemoVideo } from "@/components/landing/demo-video";
 import { Faq } from "@/components/landing/faq";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { Pricing } from "@/components/landing/pricing";
+import { StickyCta } from "@/components/landing/sticky-cta";
 import { reveal } from "@/components/landing/reveal";
 import { primaryButton } from "@/components/landing/buttons";
 import { FREE_MONTHLY_ANALYSES } from "@/lib/quota";
@@ -43,32 +45,25 @@ export default function Landing() {
             />
             <button type="submit" className={`${primaryButton} shrink-0 !py-3`}><RollLabel>Try it free</RollLabel></button>
           </div>
-          <p className="mt-3 text-xs text-muted">
-            Free plan: {FREE_MONTHLY_ANALYSES} analyses a month.{" "}
-            <a href="#how-it-works" className="text-primary underline">See how it works</a>
-          </p>
+          <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+            <p className="text-xs text-muted">No credit card required</p>
+            <p className="text-xs text-muted">
+              Free plan: {FREE_MONTHLY_ANALYSES} analyses a month.{" "}
+              <a href="#how-it-works" className="text-primary underline">See how it works</a>
+            </p>
+          </div>
         </form>
 
-        {/* The product, framed like the reference: a glass ring around the screenshot, full content width. */}
-        <div {...reveal(8)} className="hero-frame mx-auto mt-14 rounded-[28px] border border-white/70 bg-white/45 p-2.5 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.35)] backdrop-blur-sm sm:mt-16 sm:p-4 dark:border-line dark:bg-card/30">
-          <div className="relative aspect-[6/5] overflow-hidden rounded-2xl border border-line/60 bg-card sm:aspect-auto">
-            <Image
-              src="/screens/adaptations.png"
-              alt="The Applycast adaptations screen: each point from the video on the left, turned into an action for your business on the right, with the effort it takes."
-              width={2940}
-              height={1542}
-              sizes="(min-width: 1136px) 1072px, 100vw"
-              className="absolute -left-[6%] -top-[22%] h-auto w-[240%] max-w-none sm:static sm:w-full sm:max-w-full"
-            />
-          </div>
-        </div>
+        {/* The product, framed like the reference: a glass ring around a screen recording, full content width. */}
+        <DemoVideo />
       </section>
 
+      <BeforeAfter />
       <HowItWorks />
       <Pricing />
       <Faq />
 
-      <section className="mx-auto mt-28 max-w-[1136px] px-4">
+      <section id="final-cta" className="mx-auto mt-28 max-w-[1136px] px-4">
         <div {...reveal()} className="rounded-[28px] border border-line/60 bg-card/60 p-3 dark:border-line">
           <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-card p-8 sm:flex-row sm:items-center sm:px-10 sm:py-8">
             <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Turn your next video into done.</h2>
@@ -76,6 +71,8 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      <StickyCta />
     </>
   );
 }

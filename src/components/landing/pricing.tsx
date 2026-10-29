@@ -2,6 +2,7 @@ import { FOUNDING_DISCOUNT_PERCENT, FOUNDING_PRICE_LABEL, PRO_PRICE_LABEL } from
 import { FREE_MONTHLY_ANALYSES, PRO_MONTHLY_ANALYSES } from "@/lib/quota";
 import { appLink } from "@/lib/site";
 import { CountUp } from "./count-up";
+import { Reassurance } from "./reassurance";
 import { reveal } from "./reveal";
 import { outlineButton, primaryButton } from "./buttons";
 import { RollLabel } from "./roll-label";
@@ -58,6 +59,7 @@ export function Pricing() {
           <a href={appLink("/upgrade")} className={`${primaryButton} mt-5 !py-3`}><RollLabel>Claim a Founding spot</RollLabel></a>
         </div>
       </div>
+      <Reassurance />
     </section>
   );
 }
