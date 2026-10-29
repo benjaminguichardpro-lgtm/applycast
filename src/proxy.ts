@@ -2,11 +2,11 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // /api/cron and the Stripe webhook authenticate themselves (bearer secret, signature); neither has a user session.
-const PUBLIC_PATHS = ["/login", "/auth", "/api/cron", "/api/stripe/webhook", "/privacy", "/terms"];
+const PUBLIC_PATHS = ["/login", "/auth", "/api/cron", "/api/stripe/webhook", "/privacy", "/terms", "/legal-notice", "/mentions-legales", "/confidentialite", "/cgv"];
 
 // Pages served on the marketing host (getapplycast.com). Everything else lives on the app host (app.getapplycast.com).
 // With APP_HOST / MARKETING_HOST unset (the default), one host serves both and "/" is the landing.
-const MARKETING_PATHS = ["/", "/privacy", "/terms"];
+const MARKETING_PATHS = ["/", "/privacy", "/terms", "/legal-notice", "/mentions-legales", "/confidentialite", "/cgv"];
 
 // Refreshes the Supabase session cookie and sends anonymous visitors to /login.
 export async function proxy(request: NextRequest) {

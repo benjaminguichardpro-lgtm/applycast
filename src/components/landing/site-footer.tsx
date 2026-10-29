@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
-import { appLink } from "@/lib/site";
+import { LEGAL } from "@/lib/legal";
 
 export function SiteFooter() {
   return (
@@ -10,7 +10,8 @@ export function SiteFooter() {
           <Logo height={22} />
         </Link>
         <nav aria-label="Footer" className="flex gap-6">
-          <a href={appLink("/contact")} className="hover:text-ink">Contact</a>
+          <a href={`mailto:${LEGAL.email}`} className="hover:text-ink">Contact</a>
+          <Link href="/legal-notice" className="hover:text-ink">Legal notice</Link>
           <Link href="/privacy" className="hover:text-ink">Privacy</Link>
           <Link href="/terms" className="hover:text-ink">Terms</Link>
         </nav>

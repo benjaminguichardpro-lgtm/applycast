@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { getStripe } from "@/lib/billing";
+import { MARKETING_URL } from "@/lib/site";
 import { getCurrentUser } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -37,6 +38,16 @@ export async function startCheckout() {
     client_reference_id: user.id,
     success_url: `${siteUrl()}/upgrade?welcome=1`,
     cancel_url: `${siteUrl()}/upgrade`,
+    // Terms consent and the "start now" acknowledgement consumers need (right of withdrawal). Turn on with
+    // STRIPE_COLLECT_TERMS=1 once the Terms URL is set in the Stripe Dashboard: Stripe refuses it otherwise.
+    ...(process.env.STRIPE_COLLECT_TERMS === "1" && {
+      consent_collection: { terms_of_service: "required" as const },
+      custom_text: {
+        terms_of_service_acceptance: {
+          message: `I accept the [Terms](${MARKETING_URL}/terms) and ask for the service to start immediately. If I am a consumer, I know I can withdraw within 14 days and then pay only for the service already used.`,
+        },
+      },
+    }),
   };
 
   const coupon = process.env.STRIPE_FOUNDING_COUPON_ID;

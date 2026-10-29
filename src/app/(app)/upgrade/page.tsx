@@ -125,7 +125,7 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
           {stats.isPro ? (
             <form action={openPortal} className="mt-8">
               <button type="submit" className="w-full rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy">
-                {endsOn ? "Resume or manage subscription" : "Manage subscription"}
+                {endsOn ? "Resume or manage subscription" : "Cancel or manage subscription"}
               </button>
             </form>
           ) : (
