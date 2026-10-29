@@ -14,8 +14,12 @@ function siteUrl() {
 async function customerIdFor(userId: string, email: string) {
   const admin = createAdminClient();
   const { data } = await admin.from("users").select("stripe_customer_id").eq("id", userId).single();
-  if (data?.stripe_customer_id) return data.stripe_customer_id as string;
-  const customer = await getStripe().customers.create({ email, metadata: { user_id: userId } });
+  // preferred_locales decides the language of Stripe's receipts and invoices (the app and Checkout are in English).
+  if (data?.stripe_customer_id) {
+    await getStripe().customers.update(data.stripe_customer_id as string, { preferred_locales: ["en"] });
+    return data.stripe_customer_id as string;
+  }
+  const customer = await getStripe().customers.create({ email, preferred_locales: ["en"], metadata: { user_id: userId } });
   await admin.from("users").update({ stripe_customer_id: customer.id }).eq("id", userId);
   return customer.id;
 }
