@@ -2,13 +2,12 @@ import { z } from "zod";
 import { EFFORT_OPTIONS, snapEffort } from "../effort";
 import { generate } from "../llm";
 import type { Profile } from "../profile";
+import { MAX_DAYS, MAX_STEPS, MIN_DAYS } from "./plan-limits";
 
 export type PlanStep = { day: number; text: string; effort: number };
 export type Plan = { durationDays: number; steps: PlanStep[] };
 
-export const MAX_STEPS = 5;
-export const MIN_DAYS = 1;
-export const MAX_DAYS = 60;
+export { MAX_DAYS, MAX_STEPS, MIN_DAYS } from "./plan-limits";
 
 const effort = z.union(EFFORT_OPTIONS.map((o) => z.literal(o)) as [z.ZodLiteral<number>, ...z.ZodLiteral<number>[]]);
 

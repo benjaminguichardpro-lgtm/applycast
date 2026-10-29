@@ -6,7 +6,7 @@ import { useState, useSyncExternalStore } from "react";
 import { AnalysisStepper } from "@/components/analysis-stepper";
 import { EffortGauge } from "@/components/effort-gauge";
 import { EFFORT_OPTIONS, formatHours, overBy, perWeekHours, round1, totalHours } from "@/lib/effort";
-import { MAX_DAYS, MIN_DAYS } from "@/lib/pipeline/plan";
+import { MAX_DAYS, MIN_DAYS } from "@/lib/pipeline/plan-limits";
 import { regeneratePlan, validatePlan } from "../actions";
 import { RedoPlan } from "./redo-plan";
 
