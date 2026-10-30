@@ -30,10 +30,10 @@ export function DemoVideo() {
 
   return (
     <div {...reveal(8)} className="hero-frame mx-auto mt-14 rounded-[28px] border border-white/70 bg-white/45 p-2.5 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.35)] backdrop-blur-sm sm:mt-16 sm:p-4 dark:border-line dark:bg-card/30">
-      <div className="relative aspect-[6/5] overflow-hidden rounded-2xl border border-line/60 bg-card sm:aspect-auto">
+      <div className="overflow-hidden rounded-2xl border border-line/60 bg-card">
         <video
           ref={ref}
-          className="absolute -left-[6%] -top-[22%] h-auto w-[240%] max-w-none sm:static sm:block sm:w-full sm:max-w-full"
+          className="block aspect-[1920/998] w-full"
           poster="/demo/poster.jpg"
           muted
           loop

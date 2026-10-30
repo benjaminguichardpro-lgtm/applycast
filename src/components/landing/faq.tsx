@@ -1,26 +1,46 @@
 import { FREE_MONTHLY_ANALYSES } from "@/lib/quota";
 import { reveal } from "./reveal";
 
-const items = [
+const items: { q: string; a: string[] }[] = [
   {
-    q: "Where do transcripts come from?",
-    a: "From the video’s captions on YouTube, fetched when you paste the link. Applycast reads the transcript, not the video file.",
+    q: "How is this different from asking ChatGPT to summarize a YouTube video?",
+    a: [
+      "ChatGPT can summarize what a video says. Applycast answers a more useful question: “Should I act on this video — and what specifically should I do, given my business right now?”",
+      "You provide your offer, stage, role, active goal, main constraint, and weekly time available. Applycast evaluates up to five points against that context, tells you whether each one applies, works against your goal, or is irrelevant, and turns only the useful ones into a short, realistic action plan.",
+      "You are not paying for a transcript or a summary. You are paying to avoid spending an hour watching, interpreting, and trying to apply content that may not fit your business.",
+    ],
   },
   {
-    q: "What happens to my data?",
-    a: "Your analyses, plans and check-ins are stored in your account and visible only to you. You can delete your account and all its data at any time.",
+    q: "Will the advice actually be relevant to my business?",
+    a: [
+      "Yes, because the analysis is grounded in your context, not in generic startup advice.",
+      "A passage about outbound sales, pricing, onboarding, hiring, or product positioning may be highly relevant to one founder and irrelevant, or even harmful, to another. Applycast judges each point against your current offer, stage, goal, constraint, and available time.",
+      "You also stay in control: you can open the timestamped source, reject an adaptation, edit the plan, regenerate it, or discard the recommendation entirely.",
+    ],
   },
   {
-    q: "Can I cancel?",
-    a: `Yes, anytime. You keep your plans, actions and check-ins, and fall back to the free plan (${FREE_MONTHLY_ANALYSES} analyses a month).`,
+    q: "Can I trust that the points actually come from the video?",
+    a: [
+      "Yes. Every point is extracted from the video transcript and linked to a clickable timestamp that takes you directly to the relevant part of the video.",
+      "You can verify the original passage before accepting an adaptation or adding an action to your plan. For high-impact points, you can also open a longer explanation to understand why Applycast flagged them.",
+      "Applycast is designed to help you decide faster, not to ask you to trust an opaque AI output.",
+    ],
   },
   {
-    q: "What kind of videos work?",
-    a: "Podcasts, interviews and talks about building a business, with spoken content you could act on. Entertainment and music won’t give you much.",
+    q: "Will this just create another overwhelming to-do list?",
+    a: [
+      "No. Applycast is built to reduce noise, not add work.",
+      "Each analysis contains a maximum of five points. For each useful point, you receive one business adaptation and one personal adaptation, with an estimated effort in hours. You choose only what you want to keep, then Applycast creates a plan of no more than five steps, sized around the time you actually have available.",
+      "You can modify the proposed durations, regenerate the plan, or start over before validating it.",
+    ],
   },
   {
-    q: "What if a video has no captions?",
-    a: "Applycast tells you there’s nothing it can read. You can paste the transcript yourself or try another video. A failed analysis doesn’t count against your monthly quota.",
+    q: "What happens if I cancel my subscription?",
+    a: [
+      "You can cancel at any time, and you do not lose access to what you have already created.",
+      "Your existing plans, actions, and day-7 check-ins remain available, and your analysis history stays readable without an active subscription. Payments are processed securely through Stripe.",
+      `The free plan includes ${FREE_MONTHLY_ANALYSES} analyses per month, and analyses with a low match verdict do not count against your quota.`,
+    ],
   },
 ];
 
@@ -52,7 +72,11 @@ export function Faq() {
                 +
               </span>
             </summary>
-            <p className="px-6 pb-6 pr-16 text-sm leading-relaxed text-muted">{i.a}</p>
+            <div className="space-y-3 px-6 pb-6 pr-16 text-sm leading-relaxed text-muted">
+              {i.a.map((para) => (
+                <p key={para}>{para}</p>
+              ))}
+            </div>
           </details>
         ))}
       </div>
