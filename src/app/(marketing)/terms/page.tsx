@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Fill, LegalPage, LegalSection } from "@/components/landing/legal-page";
-import { FOUNDING_DISCOUNT_PERCENT, FOUNDING_PRICE_LABEL, PRO_PRICE_LABEL } from "@/lib/billing";
+import { ANNUAL_FREE_MONTHS, PRO_ANNUAL_PRICE_LABEL, PRO_PRICE_LABEL } from "@/lib/billing";
 import { hasMediator, LEGAL } from "@/lib/legal";
 import { FREE_MONTHLY_ANALYSES, PRO_MONTHLY_ANALYSES } from "@/lib/quota";
 
@@ -27,7 +27,7 @@ export default function Terms() {
 
       <LegalSection title="2. Account">
         <p>
-          You sign in with a link sent to your email address, which must be yours and valid. You are responsible for what happens under your account and for keeping your mailbox secure.
+          You sign in with your email address, which must be yours and valid, and a password. You are responsible for what happens under your account and for keeping your password and mailbox secure.
           One account is for one person.
         </p>
       </LegalSection>
@@ -42,8 +42,8 @@ export default function Terms() {
             <strong>Pro:</strong> {PRO_PRICE_LABEL} per month, with {PRO_MONTHLY_ANALYSES} analyses per month.
           </li>
           <li>
-            <strong>Founding offer:</strong> the first 50 subscribers pay {FOUNDING_DISCOUNT_PERCENT}% less ({FOUNDING_PRICE_LABEL} per month) for as long as their subscription stays active. If you
-            cancel, the offer ends and cannot be taken again.
+            <strong>Pro, yearly:</strong> {PRO_ANNUAL_PRICE_LABEL} per year ({ANNUAL_FREE_MONTHS} months free compared with monthly), with the same benefits as Pro monthly, including {PRO_MONTHLY_ANALYSES} analyses
+            per month.
           </li>
         </ul>
         <p>
@@ -53,7 +53,7 @@ export default function Terms() {
 
       <LegalSection title="4. Subscription and payment">
         <p>
-          Pro is a monthly subscription. You are charged when you subscribe, then every month on the same date, until you cancel. Payment is processed by Stripe. If a payment fails, Stripe
+          Pro is a subscription, monthly or yearly. You are charged when you subscribe, then every month (or every year) on the same date, until you cancel. Payment is processed by Stripe. If a payment fails, Stripe
           retries it for a few days; if it keeps failing, your plan returns to Free. We will tell you before any price change takes effect, and you can cancel before it does.
         </p>
       </LegalSection>

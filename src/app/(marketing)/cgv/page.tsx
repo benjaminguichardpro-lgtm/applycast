@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Fill, LegalPage, LegalSection } from "@/components/landing/legal-page";
-import { FOUNDING_DISCOUNT_PERCENT, FOUNDING_PRICE_LABEL, PRO_PRICE_LABEL } from "@/lib/billing";
+import { ANNUAL_FREE_MONTHS, PRO_ANNUAL_PRICE_LABEL, PRO_PRICE_LABEL } from "@/lib/billing";
 import { hasMediator, LEGAL } from "@/lib/legal";
 import { FREE_MONTHLY_ANALYSES, PRO_MONTHLY_ANALYSES } from "@/lib/quota";
 
@@ -27,8 +27,8 @@ export default function Cgv() {
 
       <LegalSection title="2. Compte">
         <p>
-          Vous vous connectez avec un lien envoyé à votre adresse e-mail, qui doit être valide et vous appartenir. Vous êtes responsable de ce qui se passe sous votre compte et de la sécurité de votre
-          messagerie. Un compte correspond à une personne.
+          Vous vous connectez avec votre adresse e-mail, qui doit être valide et vous appartenir, et un mot de passe. Vous êtes responsable de ce qui se passe sous votre compte et de la sécurité de votre
+          mot de passe et de votre messagerie. Un compte correspond à une personne.
         </p>
       </LegalSection>
 
@@ -42,8 +42,8 @@ export default function Cgv() {
             <strong>Pro :</strong> {PRO_PRICE_LABEL} par mois, avec {PRO_MONTHLY_ANALYSES} analyses par mois.
           </li>
           <li>
-            <strong>Offre Founding :</strong> les 50 premiers abonnés paient {FOUNDING_DISCOUNT_PERCENT} % de moins ({FOUNDING_PRICE_LABEL} par mois) tant que leur abonnement reste actif. Si vous résiliez,
-            l’offre prend fin et ne peut pas être reprise.
+            <strong>Pro annuel :</strong> {PRO_ANNUAL_PRICE_LABEL} par an ({ANNUAL_FREE_MONTHS} mois offerts par rapport au mensuel), avec les mêmes avantages que Pro mensuel, dont {PRO_MONTHLY_ANALYSES} analyses par
+            mois.
           </li>
         </ul>
         <p>
@@ -53,7 +53,7 @@ export default function Cgv() {
 
       <LegalSection title="4. Abonnement et paiement">
         <p>
-          Pro est un abonnement mensuel. Vous êtes débité à la souscription, puis chaque mois à la même date, jusqu’à la résiliation. Le paiement est traité par Stripe. En cas d’échec, Stripe réessaie pendant quelques
+          Pro est un abonnement, mensuel ou annuel. Vous êtes débité à la souscription, puis chaque mois (ou chaque année) à la même date, jusqu’à la résiliation. Le paiement est traité par Stripe. En cas d’échec, Stripe réessaie pendant quelques
           jours ; si l’échec persiste, votre formule repasse en gratuit. Nous vous prévenons avant toute modification de prix, et vous pouvez résilier avant qu’elle s’applique.
         </p>
       </LegalSection>

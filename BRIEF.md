@@ -13,7 +13,7 @@ Cible : fondateur B2B SaaS/IA de 1 à 10 personnes, anglophone. Interface en ang
 ## 2. Stack (modifiable si tu justifies)
 - Next.js (App Router) + TypeScript, Tailwind.
 - Postgres (Supabase) + Drizzle ou Prisma.
-- Auth : email magic link + Google (Supabase Auth).
+- Auth : email + mot de passe (confirmation du mot de passe à l'inscription) ; Google à venir (Supabase Auth).
 - Paiement : Stripe Checkout + portail client, 1 plan Pro à 19 $/mois.
 - Email : Resend. Tâches planifiées : cron (Vercel Cron ou équivalent).
 - IA : couche d'abstraction `llm.generate(step, input)`. Fournisseur et modèle par variables d'environnement par étape. Sortie JSON validée par schéma (zod), 1 nouvel essai si invalide.
@@ -43,7 +43,7 @@ Suppression d'une analyse : supprime plan et actions liés. Les check-ins déjà
 
 ## 5. Règles métier
 - Gratuit : 3 analyses par mois (reset le 1er). La 4e déclenche le paywall. Une analyse en échec et une analyse « Low match » ne sont pas comptées ; l'écran Low match l'indique clairement (décision du fondateur). Plans, actions et check-ins ne sont jamais verrouillés. L'historique reste lisible sans abonnement.
-- Pro : 19 $/mois, 50 analyses par mois (décision du fondateur ; une analyse Low match ou en échec n'est pas comptée non plus). Annulation à tout moment. Offre de lancement (décision du fondateur) : les 50 premiers abonnés sont « Founding Member », prix −50 % tant que l'abonnement reste actif (coupon Stripe plafonné à 50 utilisations ; annuler fait perdre la place). Suppression de compte : annule l'abonnement et supprime toutes les données.
+- Pro : 19 $/mois, 50 analyses par mois (décision du fondateur ; une analyse Low match ou en échec n'est pas comptée non plus). Annulation à tout moment. Formule annuelle (décision du fondateur, 2026-10-30) : 190 $/an (10 mois payés sur 12), mêmes avantages que le mensuel ; elle remplace l'offre Founding −50 %. Suppression de compte : annule l'abonnement et supprime toutes les données.
 - Done rate = actions Done / actions validées (sur le mois). Pas de division par les analyses.
 - Limite d'effort hebdo : `profiles.weekly_hours_limit` (6 par défaut). Jauge « X h of 6 h » sur Adaptations, Plan et My actions. Dépassement : jauge en alerte et message « Over your limit by X h ». Regenerate sur un plan modifié : avertissement « This will replace your edits ».
 - Groupes d'actions : Today (jour ≤ 1), This week (≤ 7), Later.

@@ -2,9 +2,11 @@ import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const PRO_PRICE = 19;
-export const FOUNDING_DISCOUNT_PERCENT = 50; // must match the Stripe coupon
+export const ANNUAL_MONTHS_PAID = 10; // the yearly plan charges 10 months for 12: same benefits as monthly
+export const ANNUAL_FREE_MONTHS = 12 - ANNUAL_MONTHS_PAID;
+export const PRO_ANNUAL_PRICE = PRO_PRICE * ANNUAL_MONTHS_PAID;
 export const PRO_PRICE_LABEL = `$${PRO_PRICE}`;
-export const FOUNDING_PRICE_LABEL = `$${(PRO_PRICE * (1 - FOUNDING_DISCOUNT_PERCENT / 100)).toFixed(2).replace(/\.00$/, "")}`;
+export const PRO_ANNUAL_PRICE_LABEL = `$${PRO_ANNUAL_PRICE}`;
 
 let client: Stripe | null = null;
 export function getStripe() {
@@ -31,19 +33,6 @@ export function nextResetLabel(now = new Date()) {
     day: "numeric",
     timeZone: "UTC",
   });
-}
-
-// The launch coupon (50% off, forever, max 50 redemptions) is created in Stripe; its id is in STRIPE_FOUNDING_COUPON_ID.
-// Spots are counted by Stripe itself, never by us.
-export async function foundingOfferAvailable(): Promise<boolean> {
-  const id = process.env.STRIPE_FOUNDING_COUPON_ID;
-  if (!id || !process.env.STRIPE_SECRET_KEY) return false;
-  try {
-    const c = await getStripe().coupons.retrieve(id);
-    return c.valid && (c.max_redemptions == null || c.times_redeemed < c.max_redemptions);
-  } catch {
-    return false;
-  }
 }
 
 // "Dec 3": set once the subscription was cancelled in the portal but is still paid until then; null otherwise.

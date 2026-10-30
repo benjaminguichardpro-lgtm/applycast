@@ -6,7 +6,7 @@ import { deleteAccount } from "@/app/auth/account-actions";
 import { signOut } from "@/app/auth/actions";
 import { openPortal } from "@/app/(app)/upgrade/actions";
 
-export function UserMenu({ email, isPro, isFounding }: { email: string; isPro: boolean; isFounding: boolean }) {
+export function UserMenu({ email, isPro }: { email: string; isPro: boolean }) {
   const initials = email.slice(0, 2).toUpperCase();
   const dialog = useRef<HTMLDialogElement>(null);
   const menu = useRef<HTMLDetailsElement>(null);
@@ -60,7 +60,7 @@ export function UserMenu({ email, isPro, isFounding }: { email: string; isPro: b
         <div className="absolute right-0 z-10 mt-2 w-60 rounded-2xl border border-line bg-card p-3 shadow-lg">
           <p className="truncate px-2 text-sm text-muted">{email}</p>
           {isPro && (
-            <p className="px-2 pb-2 pt-1 text-xs font-semibold text-primary">{isFounding ? "★ Pro · Founding Member" : "Pro"}</p>
+            <p className="px-2 pb-2 pt-1 text-xs font-semibold text-primary">Pro</p>
           )}
           {!isPro && (
             <Link href="/upgrade" onClick={() => menu.current?.removeAttribute("open")} className={`${item} block`}>
