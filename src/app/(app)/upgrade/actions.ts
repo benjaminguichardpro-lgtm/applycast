@@ -24,11 +24,14 @@ async function customerIdFor(userId: string, email: string) {
   return customer.id;
 }
 
-export async function startCheckout() {
+// The form's two buttons send interval=month or interval=year (10 months charged for 12).
+export async function startCheckout(formData: FormData) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
-  const price = process.env.STRIPE_PRICE_ID;
-  if (!price) throw new Error("STRIPE_PRICE_ID is not set");
+  const yearly = formData.get("interval") === "year";
+  const priceVar = yearly ? "STRIPE_PRICE_ID_ANNUAL" : "STRIPE_PRICE_ID";
+  const price = process.env[priceVar];
+  if (!price) throw new Error(`${priceVar} is not set`);
 
   const admin = createAdminClient();
   const { data: row } = await admin.from("users").select("plan").eq("id", user.id).single();
@@ -57,31 +60,12 @@ export async function startCheckout() {
     }),
   };
 
-  const coupon = process.env.STRIPE_FOUNDING_COUPON_ID;
-  const stripe = getStripe();
-  let url: string | null = null;
-  if (coupon) {
-    // Stripe enforces the 50-redemption cap: if the coupon is used up, fall back to the public price.
-    try {
-      const s = await stripe.checkout.sessions.create({
-        ...base,
-        discounts: [{ coupon }],
-        metadata: { user_id: user.id, founding: "1" },
-        subscription_data: { metadata: { user_id: user.id, founding: "1" } },
-      });
-      url = s.url;
-    } catch (e) {
-      console.error("founding checkout failed, using the public price:", e instanceof Error ? e.message : e);
-    }
-  }
-  if (!url) {
-    const s = await stripe.checkout.sessions.create({
-      ...base,
-      metadata: { user_id: user.id },
-      subscription_data: { metadata: { user_id: user.id } },
-    });
-    url = s.url;
-  }
+  const s = await getStripe().checkout.sessions.create({
+    ...base,
+    metadata: { user_id: user.id },
+    subscription_data: { metadata: { user_id: user.id } },
+  });
+  const url = s.url;
   if (!url) throw new Error("Stripe returned no checkout URL");
   redirect(url);
 }

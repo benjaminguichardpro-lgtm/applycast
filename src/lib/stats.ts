@@ -9,7 +9,6 @@ export type MonthStats = {
   left: number; // analyses left this month (free: 3, Pro: 50)
   limit: number;
   isPro: boolean;
-  isFounding: boolean;
   plansValidated: number;
   actionsValidated: number;
   counts: Record<ActionStatus, number>;
@@ -77,7 +76,6 @@ export async function getMonthStats(supabase: SupabaseClient, userId: string): P
     left: quota.left,
     limit: quota.limit,
     isPro: quota.isPro,
-    isFounding: quota.isFounding,
     plansValidated: planIds.length + orphans.length,
     actionsValidated: total,
     counts,

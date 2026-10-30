@@ -28,7 +28,6 @@ export async function POST(request: NextRequest) {
             plan: "pro",
             stripe_customer_id: typeof s.customer === "string" ? s.customer : s.customer?.id,
             stripe_subscription_id: typeof s.subscription === "string" ? s.subscription : s.subscription?.id,
-            ...(s.metadata?.founding === "1" ? { founding_member: true } : {}),
           })
           .eq("id", userId);
       }
@@ -38,8 +37,7 @@ export async function POST(request: NextRequest) {
       const plan = event.type === "customer.subscription.deleted" ? "free" : planForStatus(sub.status);
       await admin
         .from("users")
-        // Cancelling gives up the founding spot and its price.
-        .update({ plan, stripe_subscription_id: plan === "pro" ? sub.id : null, ...(plan === "free" ? { founding_member: false } : {}) })
+        .update({ plan, stripe_subscription_id: plan === "pro" ? sub.id : null })
         .eq("stripe_customer_id", customer);
     }
   } catch (e) {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { FOUNDING_PRICE_LABEL, foundingOfferAvailable, nextResetLabel, ordinal, PRO_PRICE_LABEL, proEndsOn } from "@/lib/billing";
+import { ANNUAL_FREE_MONTHS, nextResetLabel, ordinal, PRO_ANNUAL_PRICE_LABEL, PRO_PRICE_LABEL, proEndsOn } from "@/lib/billing";
 import { FREE_MONTHLY_ANALYSES, PRO_MONTHLY_ANALYSES } from "@/lib/quota";
 import { getMonthStats } from "@/lib/stats";
 import { createClient } from "@/lib/supabase/server";
@@ -12,18 +12,14 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
   const user = await getCurrentUser();
   if (!user) redirect("/login");
   const supabase = await createClient();
-  const [stats, founding] = await Promise.all([getMonthStats(supabase, user.id), foundingOfferAvailable()]);
+  const stats = await getMonthStats(supabase, user.id);
   const endsOn = stats.isPro ? await proEndsOn(user.id) : null;
 
-  // The discounted price shows for current Founding Members and for anyone who would get it at checkout.
-  const showFounding = stats.isFounding || (!stats.isPro && founding);
   const blocked = stats.left === 0;
   const title = stats.isPro
     ? blocked
       ? `You’ve used your ${PRO_MONTHLY_ANALYSES} analyses this month`
-      : stats.isFounding
-        ? "You’re on Pro · Founding Member"
-        : "You’re on Pro"
+      : "You’re on Pro"
     : blocked
       ? `Your ${ordinal(stats.analyses + 1)} analysis needs Pro`
       : `Get ${PRO_MONTHLY_ANALYSES} analyses a month with Pro`;
@@ -101,14 +97,11 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
         <aside className="self-start rounded-shell bg-navy p-6 text-on-navy">
           <h2 className="text-lg font-medium">Applycast Pro</h2>
           <p className="mt-3 text-6xl font-light leading-none">
-            {showFounding ? FOUNDING_PRICE_LABEL : PRO_PRICE_LABEL}
+            {PRO_PRICE_LABEL}
             <span className="ml-2 text-base">/ month</span>
-            {showFounding && (
-              <s className="ml-2 text-base opacity-70">
-                <span className="sr-only">Regular price </span>
-                {PRO_PRICE_LABEL}
-              </s>
-            )}
+          </p>
+          <p className="mt-2 text-sm">
+            or {PRO_ANNUAL_PRICE_LABEL} / year: <strong>{ANNUAL_FREE_MONTHS} months free</strong>, same benefits
           </p>
           {endsOn && (
             <p role="status" className="mt-4 rounded-2xl bg-white/15 p-3 text-sm font-semibold">
@@ -118,9 +111,6 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
           <ul className="mt-4 space-y-1.5 text-sm">
             <li>✓ Cancel anytime</li>
             <li>✓ If you don’t subscribe, your history stays readable</li>
-            {!stats.isPro && founding && (
-              <li className="font-semibold">★ Founding Member: the first 50 subscribers get 50% off for as long as they stay subscribed</li>
-            )}
           </ul>
           {stats.isPro ? (
             <form action={openPortal} className="mt-8">
@@ -129,9 +119,12 @@ export default async function UpgradePage({ searchParams }: { searchParams: Prom
               </button>
             </form>
           ) : (
-            <form action={startCheckout} className="mt-8">
-              <button type="submit" className="w-full rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy">
-                Subscribe
+            <form action={startCheckout} className="mt-8 space-y-2">
+              <button type="submit" name="interval" value="year" className="w-full rounded-full bg-white px-5 py-3 text-sm font-semibold text-navy">
+                Subscribe yearly · {PRO_ANNUAL_PRICE_LABEL} / year · Save {ANNUAL_FREE_MONTHS} months
+              </button>
+              <button type="submit" name="interval" value="month" className="w-full rounded-full border border-white/40 px-5 py-3 text-sm font-semibold">
+                Subscribe monthly · {PRO_PRICE_LABEL} / month
               </button>
             </form>
           )}
