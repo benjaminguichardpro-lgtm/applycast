@@ -8,7 +8,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <div className="w-full max-w-md rounded-shell bg-shell p-8">
         <div className="mb-6"><Logo height={36} /></div>
         <h1 className="text-3xl font-medium tracking-tight">Sign in</h1>
-        <p className="mt-2 text-sm text-muted">We’ll email you a magic link. No password.</p>
+        <p className="mt-2 text-sm text-muted">Sign in with your email and password.</p>
         {deleted && (
           <p role="status" className="mt-4 text-sm font-medium">
             Your account and all its data were deleted.
@@ -16,7 +16,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         )}
         {error && (
           <p role="alert" className="mt-4 text-sm text-warn">
-            That link expired or was already used. Request a new one.
+            That confirmation link expired or was already used. Sign in, or create your account again.
           </p>
         )}
         <LoginForm />
