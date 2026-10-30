@@ -9,7 +9,23 @@ const links = [
   { href: "/#how-it-works", label: "How it works" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#faq", label: "FAQ" },
+  // The contact form lives in the app (it needs a signed-in user), so this one points to the app host.
+  { href: appLink("/contact"), label: "Contact", external: true },
 ];
+
+type NavLink = (typeof links)[number];
+
+function NavItem({ link, className }: { link: NavLink; className: string }) {
+  return "external" in link ? (
+    <a href={link.href} className={className}>
+      {link.label}
+    </a>
+  ) : (
+    <Link href={link.href} className={className}>
+      {link.label}
+    </Link>
+  );
+}
 
 export function SiteHeader() {
   return (
@@ -20,9 +36,7 @@ export function SiteHeader() {
         </Link>
         <nav aria-label="Main" className="hidden gap-8 text-sm text-muted md:flex">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className="hover:text-ink">
-              {l.label}
-            </Link>
+            <NavItem key={l.href} link={l} className="hover:text-ink" />
           ))}
         </nav>
         <div className="flex items-center gap-3">
@@ -44,9 +58,7 @@ export function SiteHeader() {
             </summary>
             <div className="absolute right-0 top-12 z-20 flex w-48 flex-col gap-1 rounded-2xl border border-line bg-card p-2 text-sm shadow-lg">
               {links.map((l) => (
-                <Link key={l.href} href={l.href} className="rounded-xl px-3 py-2 hover:bg-field">
-                  {l.label}
-                </Link>
+                <NavItem key={l.href} link={l} className="rounded-xl px-3 py-2 hover:bg-field" />
               ))}
               <a href={appLink("/login")} className="rounded-xl px-3 py-2 font-semibold hover:bg-field">
                 Sign in
