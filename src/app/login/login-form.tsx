@@ -1,10 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/browser";
 
 const MIN_PASSWORD = 8;
+const RESEND_COOLDOWN = 60; // seconds before the confirmation email can be sent again
 const FIELD = "w-full rounded-2xl bg-field px-4 py-3 text-sm placeholder:text-muted";
 
 export function LoginForm() {
@@ -15,8 +16,32 @@ export function LoginForm() {
   const [confirm, setConfirm] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "confirm" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [cooldown, setCooldown] = useState(0);
+  const [resent, setResent] = useState(false);
 
   const signup = mode === "signup";
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const t = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [cooldown]);
+
+  function emailRedirectTo() {
+    return `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/auth/callback`;
+  }
+
+  async function resend() {
+    setResent(false);
+    setMessage("");
+    const { error } = await createClient().auth.resend({ type: "signup", email, options: { emailRedirectTo: emailRedirectTo() } });
+    if (error) {
+      setMessage(error.message);
+    } else {
+      setResent(true);
+    }
+    setCooldown(RESEND_COOLDOWN);
+  }
 
   function switchMode() {
     setMode(signup ? "signin" : "signup");
@@ -45,22 +70,34 @@ export function LoginForm() {
       router.refresh();
       return;
     }
-    const base = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
-    const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${base}/auth/callback` } });
+    const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: emailRedirectTo() } });
     if (error) return fail(error.message);
     if (data.session) {
       router.push("/context");
       router.refresh();
       return;
     }
+    setCooldown(RESEND_COOLDOWN);
     setStatus("confirm");
   }
 
   if (status === "confirm") {
     return (
-      <p role="status" className="mt-6 rounded-2xl bg-card p-4 text-sm">
-        Check <strong>{email}</strong> to confirm your account. Open the link in this browser, then sign in.
-      </p>
+      <div className="mt-6 rounded-2xl bg-card p-4 text-sm">
+        <p role="status">
+          Check <strong>{email}</strong> to confirm your account. Open the link in this browser, then sign in.
+        </p>
+        <p className="mt-3 text-muted">Nothing yet? Look in your spam folder, or send it again.</p>
+        <button type="button" onClick={resend} disabled={cooldown > 0} className="mt-2 font-semibold underline disabled:no-underline disabled:opacity-60">
+          {cooldown > 0 ? `Send again in ${cooldown}s` : "Send the email again"}
+        </button>
+        {resent && <p role="status" className="mt-2 text-muted">Email sent again.</p>}
+        {message && (
+          <p role="alert" className="mt-2 text-warn">
+            {message}
+          </p>
+        )}
+      </div>
     );
   }
 
